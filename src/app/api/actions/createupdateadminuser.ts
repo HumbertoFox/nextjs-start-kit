@@ -1,6 +1,6 @@
 'use server';
 
-import { FormStateCreateUpdateAdminUser, getSignUpUpdateSchema, } from '@/lib/definitions';
+import { FormStateCreateUpdateAdminUser, getSignUpUpdateSchema } from '@/lib/definitions';
 import prisma from '@/lib/prisma';
 import * as bcrypt from 'bcrypt-ts';
 
