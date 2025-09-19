@@ -41,7 +41,7 @@ export async function createUpdateAdminUser(state: FormStateCreateUpdateAdminUse
 
             if (!hasChanges) return { message: false };
 
-            await prisma.user.update({ where: { id: id }, data: { name, email, role, ...(hashedPassword && { password: hashedPassword }) } });
+            await prisma.user.update({ where: { id }, data: { name, email, role, ...(hashedPassword && { password: hashedPassword }) } });
 
             return { message: true };
         } else {
