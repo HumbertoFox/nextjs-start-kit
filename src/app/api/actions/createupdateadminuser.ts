@@ -29,6 +29,10 @@ export async function createUpdateAdminUser(state: FormStateCreateUpdateAdminUse
 
             if (!userInDb || userInDb.deletedAt) return { message: false };
 
+            const existingUser = await prisma.user.findUnique({ where: { email } });
+
+            if (existingUser && existingUser.id !== id) return { errors: { email: ['Este e-mail já está em uso!'] } };
+
             const hasChanges =
                 userInDb.name !== name ||
                 userInDb.email !== email ||
@@ -43,7 +47,7 @@ export async function createUpdateAdminUser(state: FormStateCreateUpdateAdminUse
         } else {
             const existingUser = await prisma.user.findFirst({ where: { email } });
 
-            if (existingUser) return { errors: { email: ['Este e-mail já está em uso'] } };
+            if (existingUser) return { errors: { email: ['Este e-mail já está em uso!'] } };
 
             await prisma.user.create({ data: { name, email, role, password: hashedPassword! } });
 
