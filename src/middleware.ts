@@ -1,25 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { updateSession } from './lib/session';
 
-const protectedRoutes = ['/dashboard'];
-const publicRoutes = ['/login', '/'];
-
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
-  const isProtectedRoute = protectedRoutes.includes(path);
-  const isPublicRoute = publicRoutes.includes(path);
+
+  const isProtectedRoute = path.startsWith('/dashboard');
+  const isAdminRoute = path.startsWith('/dashboard/admins');
+  const isPublicRoute = ['/login', '/'].includes(path);
 
   const session = await updateSession();
 
   if (isProtectedRoute && !session?.userId) {
-    return NextResponse.redirect(new URL('/login', req.nextUrl));
+    return NextResponse.redirect(new URL(`/login?redirect=${encodeURIComponent(path)}`, req.nextUrl));
   }
 
-  if (isPublicRoute && session?.userId && !req.nextUrl.pathname.startsWith('/dashboard')) {
+  if (isPublicRoute && session?.userId && !path.startsWith('/dashboard')) {
     return NextResponse.redirect(new URL('/dashboard', req.nextUrl));
   }
 
-  if (path.startsWith('/dashboard/admins') && session?.role !== 'ADMIN') {
+  if (isAdminRoute && session?.role !== 'ADMIN') {
     return NextResponse.redirect(new URL('/dashboard', req.nextUrl));
   }
 
