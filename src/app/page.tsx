@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export const generateMetadata = async (): Promise<Metadata> => {
   return {
-    title: 'Bem-vindo ao Create Next App'
+    title: 'Bem-vindo ao Create Next Start Kit App'
   };
 };
 

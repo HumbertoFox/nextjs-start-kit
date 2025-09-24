@@ -3,7 +3,9 @@ import { z, object, string, email } from 'zod';
 export const createAdminSchema = object({
     name: string()
         .min(1, 'Nome é obrigatório'),
-    email: email('Endereço de e-mail inválido'),
+    email: email('Endereço de e-mail inválido')
+        .trim()
+        .toLowerCase(),
     password: string()
         .min(8, 'A senha deve ter pelo menos 8 caracteres'),
     password_confirmation: string()
@@ -20,7 +22,9 @@ export function getSignUpUpdateSchema(formData: FormData) {
     return object({
         name: string()
             .min(1, 'Nome é obrigatório'),
-        email: email('Endereço de e-mail inválido'),
+        email: email('Endereço de e-mail inválido')
+            .trim()
+            .toLowerCase(),
         password: isEdit
             ? string().optional()
             : string().min(8, 'A senha deve ter pelo menos 8 caracteres'),
@@ -43,7 +47,9 @@ export function getSignUpUpdateSchema(formData: FormData) {
 }
 
 export const signInSchema = object({
-    email: email('E-mail inválido'),
+    email: email('E-mail inválido')
+        .trim()
+        .toLowerCase(),
     password: string()
         .min(8, 'A senha deve ter mais de 8 caracteres')
         .max(32, 'A senha deve ter menos de 32 caracteres')
@@ -53,6 +59,8 @@ export const updateUserSchema = object({
     name: string()
         .min(1, 'Nome é obrigatório'),
     email: email('E-mail inválido')
+        .trim()
+        .toLowerCase()
 })
 
 export const deleteUserSchema = object({
@@ -74,7 +82,9 @@ export const passwordUpdateSchema = object({
     });
 
 export const passwordResetSchema = object({
-    email: email('E-mail inválido'),
+    email: email('E-mail inválido')
+        .trim()
+        .toLowerCase(),
     token: string()
         .min(1, 'Token é necessário'),
     password: string()
@@ -89,6 +99,8 @@ export const passwordResetSchema = object({
 
 export const passwordForgotSchema = object({
     email: email('E-mail inválido')
+        .trim()
+        .toLowerCase()
 });
 
 export type FormStateCreateAdmin =

@@ -7,7 +7,7 @@ import { createSession } from '@/lib/session';
 
 export async function loginUser(state: FormStateLoginUser, formData: FormData): Promise<FormStateLoginUser> {
     const validatedFields = signInSchema.safeParse({
-        email: formData.get('email') as string,
+        email: (formData.get('email') as string)?.toLowerCase().trim(),
         password: formData.get('password') as string,
     });
 
