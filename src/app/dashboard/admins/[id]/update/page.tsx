@@ -19,12 +19,27 @@ export const generateMetadata = async (): Promise<Metadata> => {
 
 export default async function Update({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const user = await prisma.user.findUnique({ where: { id, deletedAt: null }, select: { id: true, name: true, email: true, role: true } });
+    const user = await prisma.user.findUnique({
+        where: {
+            id,
+            deletedAt: null
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true
+        }
+    });
     return (
         <>
             <EditUserBreadcrumb user={user as User} />
             <div className="flex gap-4 rounded-xl p-4">
-                <RegisterUserForm user={user as UserProps} isEdit={true} valueButton="Atualizar" />
+                <RegisterUserForm
+                    user={user as UserProps}
+                    isEdit={true}
+                    valueButton="Atualizar"
+                />
             </div>
         </>
     );

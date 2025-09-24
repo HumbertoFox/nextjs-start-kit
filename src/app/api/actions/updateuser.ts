@@ -18,7 +18,11 @@ export async function updateUser(state: FormStateUserUpdate, formData: FormData)
 
     if (!sessionUser?.id) return redirect('/');
 
-    const emailInUse = await prisma.user.findUnique({ where: { email } });
+    const emailInUse = await prisma.user.findUnique({
+        where: {
+            email
+        }
+    });
 
     if (emailInUse && emailInUse.id !== sessionUser.id) return { errors: { email: ['Este e-mail já está em uso'] } };
 
@@ -28,7 +32,12 @@ export async function updateUser(state: FormStateUserUpdate, formData: FormData)
 
     if (Object.keys(dataToUpdate).length === 0) return { message: 'No changes made.' };
 
-    await prisma.user.update({ where: { id: sessionUser.id }, data: dataToUpdate });
+    await prisma.user.update({
+        where: {
+            id: sessionUser.id
+        },
+        data: dataToUpdate
+    });
 
     return { success: true };
 }

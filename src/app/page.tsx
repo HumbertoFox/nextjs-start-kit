@@ -12,7 +12,11 @@ export const generateMetadata = async (): Promise<Metadata> => {
 };
 
 export default async function Welcome() {
-  const isUserAdmin = await prisma.user.findMany({ where: { role: 'ADMIN' } });
+  const isUserAdmin = await prisma.user.findMany({
+    where: {
+      role: 'ADMIN'
+    }
+  });
   const session = await getSession();
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 font-[family-name:var(--font-geist-sans)]">

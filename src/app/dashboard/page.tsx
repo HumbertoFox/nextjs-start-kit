@@ -12,7 +12,11 @@ export const generateMetadata = async (): Promise<Metadata> => {
 
 export default async function Dashboard() {
   const sessionUser = await getUser();
-  const user = await prisma.user.findUnique({ where: { id: sessionUser?.id } });
+  const user = await prisma.user.findUnique({
+    where: {
+      id: sessionUser?.id
+    }
+  });
   if (!sessionUser?.id || !user?.id) redirect('/login');
   return <DashboardPageClient />;
 }

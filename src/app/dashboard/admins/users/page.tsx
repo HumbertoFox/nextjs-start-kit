@@ -52,14 +52,24 @@ export default async function Users(props: { searchParams?: Promise<{ page?: num
     const currentPage = searchParams?.page || 1;
     const [users, totalUsers] = await Promise.all([
         prisma.user.findMany({
-            where: { role: 'USER', deletedAt: null },
-            select: { id: true, name: true, email: true },
+            where: {
+                role: 'USER',
+                deletedAt: null
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true
+            },
             skip: (currentPage - 1) * pageSize,
-            take: pageSize,
+            take: pageSize
         }),
         prisma.user.count({
-            where: { role: 'USER', deletedAt: null },
-        }),
+            where: {
+                role: 'USER',
+                deletedAt: null
+            }
+        })
     ]);
     const totalPages = Math.ceil(totalUsers / pageSize);
     return (

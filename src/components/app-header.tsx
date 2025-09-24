@@ -24,19 +24,18 @@ export function AppHeader({ user }: { user: User }) {
     const isAdmin = user.role === 'ADMIN';
     const pathName = usePathname();
     const getInitials = useInitials();
-    const t = useTranslations('AppSidebar');
 
     const mainNavItems: NavItem[] = [
-        { title: t('Dashboard'), href: '/dashboard', icon: LayoutGrid },
+        { title: 'Painel', href: '/dashboard', icon: LayoutGrid },
     ];
     const adminNavItems: NavItem[] = [
-        { title: t('Administrators'), href: '/dashboard/admins', icon: UserRoundCog },
-        { title: t('Users'), href: '/dashboard/admins/users', icon: UsersRound },
-        { title: t('Register'), href: '/dashboard/admins/register', icon: UserRoundPlus },
+        { title: 'Administradores', href: '/dashboard/admins', icon: UserRoundCog },
+        { title: 'Usuários', href: '/dashboard/admins/users', icon: UsersRound },
+        { title: 'Cadastrar', href: '/dashboard/admins/register', icon: UserRoundPlus },
     ];
     const rightNavItems: NavItem[] = [
-        { title: t('Repository'), href: 'https://github.com/HumbertoFox/next-auth-start-kit', icon: Folder },
-        { title: t('Developer'), href: 'https://betofoxnet-info.vercel.app/', icon: BookOpen },
+        { title: 'Repositório', href: 'https://github.com/HumbertoFox/next-auth-start-kit', icon: Folder },
+        { title: 'Desenvolvedor', href: 'https://betofoxnet-info.vercel.app/', icon: BookOpen },
     ];
 
     const navItems = isAdmin ? [...mainNavItems, ...adminNavItems] : mainNavItems;

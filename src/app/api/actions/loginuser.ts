@@ -16,7 +16,12 @@ export async function loginUser(state: FormStateLoginUser, formData: FormData): 
     const { email, password } = validatedFields.data;
 
     try {
-        const user = await prisma.user.findFirst({ where: { email, deletedAt: null } });
+        const user = await prisma.user.findFirst({
+            where: {
+                email,
+                deletedAt: null
+            }
+        });
 
         if (!user) return { warning: 'E-mail ou senha inválidos' };
 

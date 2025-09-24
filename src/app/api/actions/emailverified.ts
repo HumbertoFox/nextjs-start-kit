@@ -11,9 +11,18 @@ export async function emailVerifiedChecked() {
     if (!sessionUser?.email) return null;
 
     const email = sessionUser.email;
-    const tokenExisting = await prisma.verificationToken.findFirst({ where: { identifier: email } });
 
-    const isCheckedEmail = await prisma.user.findUnique({ where: { email } });
+    const tokenExisting = await prisma.verificationToken.findFirst({
+        where: {
+            identifier: email
+        }
+    });
+
+    const isCheckedEmail = await prisma.user.findUnique({
+        where: {
+            email
+        }
+    });
 
     if (isCheckedEmail?.emailVerified) return null;
 
@@ -23,7 +32,12 @@ export async function emailVerifiedChecked() {
         const token = crypto.randomBytes(32).toString('hex');
 
         const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
-        await prisma.verificationToken.create({ data: { identifier: email, token, expires } });
+
+        await prisma.verificationToken.create({
+            data: {
+                identifier: email, token, expires
+            }
+        });
 
         const verifyLink = `${process.env.NEXT_URL}/auth/verify-email?token=${token}&email=${email}`;
         await sendEmailVerification(email, verifyLink);

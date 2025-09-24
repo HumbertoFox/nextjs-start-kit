@@ -21,7 +21,11 @@ export async function updatePassword(state: FormStatePasswordUpdate, formData: F
 
     if (!sessionUser?.id) return redirect('/');
 
-    const authUser = await prisma.user.findUnique({ where: { id: sessionUser.id } });
+    const authUser = await prisma.user.findUnique({
+        where: {
+            id: sessionUser.id
+        }
+    });
 
     if (!authUser) return redirect('/');
 
@@ -33,7 +37,14 @@ export async function updatePassword(state: FormStatePasswordUpdate, formData: F
 
     const hashedPassword = await hash(password, 12);
 
-    await prisma.user.update({ where: { id: sessionUser.id }, data: { password: hashedPassword }, });
+    await prisma.user.update({
+        where: {
+            id: sessionUser.id
+        },
+        data: {
+            password: hashedPassword
+        }
+    });
 
     return { message: true };
 }
