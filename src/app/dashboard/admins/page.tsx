@@ -47,8 +47,8 @@ export default async function Admins() {
                         <TableHeader>
                             <TableRow className="cursor-default">
                                 <TableHead className="text-center">Nº</TableHead>
-                                <TableHead className="text-center">Cód.</TableHead>
-                                <TableHead className="text-center">Nome</TableHead>
+                                <TableHead className="text-center max-lg:hidden">Cód.</TableHead>
+                                <TableHead className="text-center max-lg:hidden">Nome</TableHead>
                                 <TableHead className="text-center">E-mail</TableHead>
                                 <TableHead className="text-center">Ações</TableHead>
                             </TableRow>
@@ -61,11 +61,9 @@ export default async function Admins() {
                             )}
                             {admins.map((admin, index) => (
                                 <TableRow key={index} className="cursor-default">
-                                    <TableCell>
-                                        {index + 1}
-                                    </TableCell>
-                                    <TableCell>{admin.id}</TableCell>
-                                    <TableCell>{admin.name}</TableCell>
+                                    <TableCell>{index + 1}</TableCell>
+                                    <TableCell className="max-lg:hidden">{admin.id}</TableCell>
+                                    <TableCell className="max-lg:hidden">{admin.name}</TableCell>
                                     <TableCell>{admin.email}</TableCell>
                                     <TableCell className="flex justify-evenly items-center my-1">
                                         <Link

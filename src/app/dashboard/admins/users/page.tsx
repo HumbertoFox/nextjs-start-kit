@@ -88,8 +88,8 @@ export default async function Users(props: { searchParams?: Promise<{ page?: num
                         <TableHeader>
                             <TableRow className="cursor-default">
                                 <TableHead className="text-center">Nº</TableHead>
-                                <TableHead className="text-center">Cód.</TableHead>
-                                <TableHead className="text-center">Nome</TableHead>
+                                <TableHead className="text-center max-lg:hidden">Cód.</TableHead>
+                                <TableHead className="text-center max-lg:hidden">Nome</TableHead>
                                 <TableHead className="text-center">E-mail</TableHead>
                                 <TableHead className="text-center">Ações</TableHead>
                             </TableRow>
@@ -103,8 +103,8 @@ export default async function Users(props: { searchParams?: Promise<{ page?: num
                             {users.map((user, index) => (
                                 <TableRow key={user.id} className="cursor-default">
                                     <TableCell>{(currentPage - 1) * 10 + index + 1}</TableCell>
-                                    <TableCell>{user.id}</TableCell>
-                                    <TableCell>{user.name}</TableCell>
+                                    <TableCell className="max-lg:hidden">{user.id}</TableCell>
+                                    <TableCell className="max-lg:hidden">{user.name}</TableCell>
                                     <TableCell>{user.email}</TableCell>
                                     <TableCell className="flex justify-evenly items-center my-1">
                                         <Link
