@@ -116,7 +116,14 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .btn-icon-toggle {
+    @apply absolute right-2 top-1.5 opacity-30 hover:opacity-100 duration-300 cursor-pointer;
   }
 }

@@ -117,7 +117,7 @@ export default function Login() {
                             />
                             <button
                                 type="button"
-                                className='absolute right-2 top-[6px] opacity-30 hover:opacity-100 duration-300 cursor-pointer'
+                                className="btn-icon-toggle"
                                 onClick={togglePasswordVisibility}
                             >
                                 {isVisibledPassword ? <Icon iconNode={Eye} /> : <Icon iconNode={EyeClosed} />}
