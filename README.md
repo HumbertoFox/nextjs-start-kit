@@ -372,75 +372,197 @@ const encodedKey = new TextEncoder().encode(secretKey);
 
 ```
 
-- Loads a secret key from the environment (AUTH_SECRET)
+- Loads a secret key from the environment (`AUTH_SECRET`)
 
-- This key is used to sign and verify JWTs using HS256 algorithm
+- This key is used to sign and verify JWTs using `HS256` algorithm
+
+---
+
+# 🔒 Token Lifetime Settings
+
+```ts
+
+const MAX_SESSION_AGE = 24 * 60 * 60;   // 24 hours
+const TOKEN_LIFETIME = 15 * 60;        // 15 minutes
+const RENEW_THRESHOLD = 5 * 60;        // 5 minutes
+
+```
+
+- TOKEN_LIFETIME: Initial JWT lifespan
+
+- RENEW_THRESHOLD: If JWT has less than this time left, it gets refreshed
+
+- MAX_SESSION_AGE: Absolute max session age (after which user must re-authenticate)
 
 ---
 
 # 🔐 createSession(userId: string)
 
-Generates a signed JWT (valid for 15 minutes) and sets it in a secure, HTTP-only cookie named sessionAuth.
+Generates a signed JWT (`valid for 15 minutes`) and sets it in a secure, `HTTP-only` cookie named `sessionAuth`.
 
 ```ts
 
-export async function createSession(userId: string): Promise<void> { ... }
+export async function createSession(userId: string): Promise<void> {
+    const now = Math.floor(Date.now() / 1000);
+    const expTimestamp = now + TOKEN_LIFETIME;
+    const expDate = new Date(expTimestamp * 1000);
+
+    const session = await new SignJWT({ userId, role, iat: now })
+        .setProtectedHeader({ alg: 'HS256' })
+        .setIssuedAt(now)
+        .setExpirationTime(expTimestamp)
+        .sign(encodedKey);
+
+    (await cookies()).set('sessionAuth', session, {
+        httpOnly: true,
+        secure: true,
+        expires: expDate,
+        sameSite: 'lax',
+        path: '/'
+    });
+}
 
 ```
 
-- Cookie attributes:
+## Cookie attributes:
 
-  - httpOnly: can't be accessed via JavaScript
+  - `httpOnly`: not accessible from JavaScript (protects from XSS)
 
-  - secure: HTTPS-only
+  - `secure`: sent only over HTTPS
 
-  - sameSite: 'lax': prevents CSRF
+  - `sameSite: 'lax'`: mitigates CSRF
+
+  - `expires`: 15 minutes from issuance
+
+  - `path: '/'`: valid across the entire site
 
 ---
 
 # 🔎 decrypt(session: string)
 
-Decodes and verifies the JWT token. Returns the payload or null if invalid.
+Decodes and verifies the JWT. Returns the payload or `null` if the token is invalid or expired.
 
 ```ts
 
-export async function decrypt(session: string | undefined = '') { ... }
+export async function decrypt(session: string | undefined = '') {
+    if (!session) return null;
+    try {
+        const { payload } = await jwtVerify(session, encodedKey, { algorithms: ['HS256'] });
+        return payload;
+    } catch (err) {
+        console.log('failed to verify session', err);
+        return null;
+    }
+}
 
 ```
+
+- Verifies using HS256 with the shared secret
+
+- Handles invalid or missing tokens gracefully
 
 ---
 
 # ✅ verifySession()
 
-Checks if a valid session exists. If not, redirects to /login.
+Checks if a valid session exists. If not, redirects the user to `/login`.
 
 ```ts
 
-export async function verifySession(): Promise<{ isAuth: boolean; userId: string; }> { ... }
+export async function verifySession(): Promise<{ isAuth: boolean; userId: string; }> {
+    const cookie = (await cookies()).get('sessionAuth')?.value;
+    const session = await decrypt(cookie);
+    if (!session?.userId) redirect('/login');
+
+    return { isAuth: true, userId: String(session.userId) };
+}
 
 ```
+
+- Returns `{ isAuth: true, userId }` if authenticated
+
+- Otherwise, calls `redirect('/login')`
 
 ---
 
 # 🧾 getSession()
 
-Returns the session payload if present, without redirecting.
+Returns the session payload if present and valid, without triggering a redirect.
 
 ```ts
 
-export async function getSession() { ... }
+export async function getSession() {
+    const session = (await cookies()).get('sessionAuth')?.value;
+    if (!session) return null;
+    return await decrypt(session);
+}
 
 ```
+
+- Useful for optional authentication or background checks
 
 ---
 
 # 🔄 updateSession()
 
-If the session is close to expiring (less than 5 minutes left), this function renews it with a new token.
+Renews the session cookie if it's about to expire and within allowed max session age.
 
 ```ts
 
-export async function updateSession() { ... }
+export async function updateSession() {
+    const sessionToken = (await cookies()).get('sessionAuth')?.value;
+
+    if (!sessionToken) return null;
+
+    const payload = await decrypt(sessionToken);
+
+    if (!payload?.userId || !payload.exp || !payload.iat) return null;
+
+    const now = Math.floor(Date.now() / 1000);
+    const timeLeft = payload.exp - now;
+    const sessionAge = now - payload.iat;
+
+    if (sessionAge > MAX_SESSION_AGE) {
+        (await cookies()).delete('sessionAuth');
+        return null;
+    }
+
+    if (timeLeft < RENEW_THRESHOLD) {
+        const newExp = now + TOKEN_LIFETIME;
+        const newExpDate = new Date(newExp * 1000);
+
+        const newToken = await new SignJWT({ userId: payload.userId, role: payload.role, iat: payload.iat })
+            .setProtectedHeader({ alg: 'HS256' })
+            .setIssuedAt(payload.iat)
+            .setExpirationTime(newExp)
+            .sign(encodedKey);
+
+        (await cookies()).set('sessionAuth', newToken, {
+            httpOnly: true,
+            secure: true,
+            expires: newExpDate,
+            sameSite: 'lax',
+            path: '/'
+        });
+    }
+    return { userId: payload.userId, role: payload.role };
+}
+
+```
+
+## Renewal Logic:
+
+Checks how much time is left on the current token (`timeLeft`)
+
+If `timeLeft < RENEW_THRESHOLD`, creates a new token without changing the original `iat`
+
+Ensures sessions cannot be extended indefinitely by refreshing within `MAX_SESSION_AGE`
+
+If `MAX_SESSION_AGE` is exceeded, the session is deleted and the user is logged out
+
+```ts
+
+{ userId: string, role: string } | null
 
 ```
 
@@ -478,81 +600,76 @@ export const getUser = cache(async () => {
 
 ---
 
-# 🌐 3. middleware.ts – Route Protection
+# 🛡️ 3. middleware.ts – Route Protection with JWT and Role-Based Access
 
-This middleware handles redirection based on whether the user is authenticated.
+This middleware protects routes based on session presence and user role.
+
+## 📄 Middleware Code (Latest Version)
 
 ```ts
 
 import { NextRequest, NextResponse } from 'next/server';
 import { updateSession } from './lib/session';
 
-```
-
----
-
-# 🚧 Middleware Logic
-The middleware function restricts access to protected routes like `/dashboard` and ensures only `ADMIN` users can access `/dashboard/admins`.
-
-```ts
-
-const protectedRoutes = ['/dashboard'];
-const publicRoutes = ['/login', '/'];
-
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
-  const isProtectedRoute = protectedRoutes.includes(path);
-  const isPublicRoute = publicRoutes.includes(path);
+
+  const isProtectedRoute = path.startsWith('/dashboard');
+  const isAdminRoute = path.startsWith('/dashboard/admins');
+  const isPublicRoute = ['/login', '/'].includes(path);
 
   const session = await updateSession();
 
-  // 🔒 Redirect unauthenticated users from protected routes
   if (isProtectedRoute && !session?.userId) {
-    return NextResponse.redirect(new URL('/login', req.nextUrl));
+    return NextResponse.redirect(new URL(`/login?redirect=${encodeURIComponent(path)}`, req.nextUrl));
   }
 
-  // 🔁 Redirect authenticated users away from public routes
   if (isPublicRoute && session?.userId && !path.startsWith('/dashboard')) {
     return NextResponse.redirect(new URL('/dashboard', req.nextUrl));
   }
 
-  // 🛑 Only allow ADMIN users to access /dashboard/admins
-  if (path.startsWith('/dashboard/admins') && session?.role !== 'ADMIN') {
+  if (isAdminRoute && session?.role !== 'ADMIN') {
     return NextResponse.redirect(new URL('/dashboard', req.nextUrl));
   }
 
   return NextResponse.next();
 }
 
+export const config = {
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|videos/).*)']
+};
+
 
 ```
 
 ---
 
-# 🔄 middleware(req: NextRequest)
+## 🔍 Route Behavior Overview
 
-- Redirects unauthenticated users away from protected routes
-
-- Prevents logged-in users from visiting public routes like /login
-
-```ts
-
-export default async function middleware(req: NextRequest) { ... }
-
-```
+| Route       | Type                             | Condition	Behavior                                          |
+|-------------|----------------------------------|--------------------------------------------------------------|
+| Public	    | `/login`, `/`	                   | Redirects to `/dashboard` if session exists                  |
+| Protected	  | Routes under `/dashboard`	       | Requires valid session (`userId`) or redirects to login      |
+| Admin-only	| Routes under `/dashboard/admins` | Requires role = `'ADMIN'`, otherwise redirects to `/dashboa` |
 
 ---
 
-# 🎯 Matcher Configuration
+# ⚙️ Middleware Matcher
 This config ensures the middleware only runs on relevant routes, skipping static assets and API endpoints:
 
 ```ts
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|videos/).*)']
-}
+  matcher: [
+    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|videos/).*)',
+  ],
+};
 
 ```
+
+- <strong>Excludes</strong>: API routes, Next.js static assets, media, and SEO files
+
+- <strong>Applies to</strong>: All other pages (including dynamic ones)
 
 ---
 
@@ -599,7 +716,7 @@ redirect('/login');
 
 ### 4. Use getUser() in Server Components
 
-```ts
+```tsx
 
 import { getUser } from '@/lib/getUser';
 

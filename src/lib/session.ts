@@ -7,6 +7,9 @@ if (!process.env.AUTH_SECRET) throw new Error('SECRET is not defined');
 
 const secretKey = process.env.AUTH_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
+const MAX_SESSION_AGE = 24 * 60 * 60;
+const TOKEN_LIFETIME = 15 * 60;
+const RENEW_THRESHOLD = 5 * 60;
 
 export async function decrypt(session: string | undefined = '') {
     if (!session) return null;
@@ -20,12 +23,13 @@ export async function decrypt(session: string | undefined = '') {
 }
 
 export async function createSession(userId: string, role: string): Promise<void> {
-    const expTimestamp = Math.floor(Date.now() / 1000) + 15 * 60;
+    const now = Math.floor(Date.now() / 1000);
+    const expTimestamp = now + TOKEN_LIFETIME;
     const expDate = new Date(expTimestamp * 1000);
 
-    const session = await new SignJWT({ userId, role })
+    const session = await new SignJWT({ userId, role, iat: now })
         .setProtectedHeader({ alg: 'HS256' })
-        .setIssuedAt()
+        .setIssuedAt(now)
         .setExpirationTime(expTimestamp)
         .sign(encodedKey);
 
@@ -35,7 +39,7 @@ export async function createSession(userId: string, role: string): Promise<void>
         expires: expDate,
         sameSite: 'lax',
         path: '/'
-    })
+    });
 }
 
 export async function verifySession(): Promise<{ isAuth: boolean; userId: string; }> {
@@ -59,18 +63,24 @@ export async function updateSession() {
 
     const payload = await decrypt(sessionToken);
 
-    if (!payload?.userId || !payload.exp) return null;
+    if (!payload?.userId || !payload.exp || !payload.iat) return null;
 
     const now = Math.floor(Date.now() / 1000);
     const timeLeft = payload.exp - now;
+    const sessionAge = now - payload.iat;
 
-    if (timeLeft < 5 * 60) {
-        const newExp = now + 15 * 60;
+    if (sessionAge > MAX_SESSION_AGE) {
+        (await cookies()).delete('sessionAuth');
+        return null;
+    }
+
+    if (timeLeft < RENEW_THRESHOLD) {
+        const newExp = now + TOKEN_LIFETIME;
         const newExpDate = new Date(newExp * 1000);
 
-        const newToken = await new SignJWT({ userId: payload.userId })
+        const newToken = await new SignJWT({ userId: payload.userId, role: payload.role, iat: payload.iat })
             .setProtectedHeader({ alg: 'HS256' })
-            .setIssuedAt()
+            .setIssuedAt(payload.iat)
             .setExpirationTime(newExp)
             .sign(encodedKey);
 
