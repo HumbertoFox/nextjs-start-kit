@@ -1,9 +1,9 @@
 {
-    "name": "nextjs-kit-starter",
-    "description": "Adapter nextjs-kit-starter.",
-    "author": "BetoFoxNet",
+    "name": "nextjs-starter-kit",
+    "description": "Adapter nextjs-starter-kit.",
+    "author": "Next.Js",
     "quote": {
-        "message": "Build things that matter BetoFoxNet.",
-        "author": "BetoFoxNet"
+        "message": "Build things that matter Next.Js.",
+        "author": "Next.Js"
     }
 }
