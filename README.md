@@ -7,36 +7,40 @@
 
   <a href="https://nextjs.org/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg" width="130px" alt="Icon NextJs" /></a>
 
-## About NextJS
-### Authentication!
+## Sobre NextJS
+### Autenticação!
+
+---
+
+## 📚 Traduções: [English](README.en.md)
 
 </div>
 
-## 👤 Admin Registration Page (Next.js + Prisma)
-This project includes a protected admin registration page. The form is only accessible if no admin user exists yet in the database. It’s built with Next.js App Router, Prisma, bcrypt-ts, React Hooks, and Zod validation.
+## 👤 Página de registro do administrador (Next.js + Prisma)
+Este projeto inclui uma página de registro de administrador protegida. O formulário só é acessível se ainda não houver um usuário administrador no banco de dados. Ele foi desenvolvido com Next.js App Router, Prisma, bcrypt-ts, React Hooks e validação Zod.
 
-## 📁 File Structure
+## 📁 Estrutura do arquivo
 
 ```bash
 
 /app
   /register
-    └── page.tsx                # Redirects if admin exists
-    └── form-register-admin.tsx # Client-side admin registration form
+    └── page.tsx                # Redireciona se o administrador existir
+    └── form-register-admin.tsx # Formulário de registro de administrador do lado do cliente
 
 /app/api/actions
-  └── createadmin.ts           # Server-side logic for admin creation
+  └── createadmin.ts           # Lógica do lado do servidor para criação de administrador
 
 /lib
-  └── prisma.ts                # Prisma client
-  └── session.ts               # Session management
-  └── definitions.ts           # Zod schema definitions
+  └── prisma.ts                # Cliente Prisma
+  └── session.ts               # Gerenciamento de sessão
+  └── definitions.ts           # Definições do esquema Zod
 
 ```
 
 ---
 
-## 🚦 Redirect Logic (page.tsx)
+## 🚦 Lógica de redirecionamento (page.tsx)
 
 ```tsx
 
@@ -45,46 +49,46 @@ if (isUserAdmin.length > 0) redirect('/dashboard');
 
 ```
 
-If an ADMIN user already exists, the user is redirected to `/dashboard`.
-If not, the admin registration form is shown.
+Se já existir um usuário ADMIN, ele será redirecionado para `/dashboard`.
+Caso contrário, o formulário de registro de administrador será exibido.
 
 ---
 
-## 🧾 Admin Registration Form
+### 🧾 Formulário de registro de administrador
 
-### The form includes the following fields:
+## O formulário inclui os seguintes campos:
 
-- Name
+- Nome
 
-- Email
+- E-mail
 
-- Password
+- Senha
 
-- Password confirmation
+- Confirmação de senha
 
-- Role (locked to ADMIN)
+- Papel (bloqueado para ADMIN)
 
-### Validation includes:
+## A validação inclui:
 
-- Required fields
+- Campos obrigatórios
 
 - Valid email format
 
-- Password match
+- Correspondência de senha
 
-- Strong password (handled by Zod)
+- Senha forte (gerenciada pelo Zod)
 
-### UX features:
+## Recursos de UX:
 
-- Show/hide password toggle
+- Alternar entre mostrar/ocultar senha
 
-- Inline error messages
+- Mensagens de erro em linha
 
-- Loading spinner in the submit button
+- Carregando spinner no botão de envio
 
 ---
 
-## 🔐 Server-side Logic (createadmin.ts)
+## 🔐 Lógica do lado do servidor (createadmin.ts)
 
 ```ts
 
@@ -93,27 +97,27 @@ const user = await prisma.user.create({ data: { name, email, role, password: has
 
 ```
 
-### The createAdmin function:
+### A função createAdmin:
 
-1. Validates form data using Zod.
+1. Valida os dados do formulário usando Zod.
 
-2. Hashes the password with bcrypt-ts.
+2. Gera hash da senha com bcrypt-ts.
 
-3. Creates the user in the database using Prisma.
+3. Cria o usuário no banco de dados usando Prisma.
 
-4. Automatically starts a session.
+4. Inicia uma sessão automaticamente.
 
-On failure, it returns a generic warning that is displayed in the UI.
+Em caso de falha, retorna um aviso genérico que é exibido na interface do usuário.
 
 ---
 
-## 📋 How to Use
+## 📋 Como usar
 
-1. Clone this repository.
+1. Clone este repositório.
 
-2. Set up your environment variables, especially DATABASE_URL.
+2. Configure suas variáveis ​​de ambiente, especialmente DATABASE_URL.
 
-3. Run the Prisma migrations:
+3. Execute as migrações do Prisma:
 
 ```bash
 
@@ -121,7 +125,7 @@ npx prisma migrate dev
 
 ```
 
-4. Start the development server:
+4. Inicie o servidor de desenvolvimento:
 
 ```bash
 
@@ -129,53 +133,53 @@ npm run dev
 
 ```
 
-5. Visit `http://localhost:3000`.
+5. Acesse `http://localhost:3000`.
 
-If no admin exists, the form will appear. Otherwise, you'll be redirected.
+Se não houver um administrador, o formulário será exibido. Caso contrário, você será redirecionado.
 
 ---
 
-## ✅ Tech Stack
+## ✅ Pilha de Tecnologia
 
-- Next.js (App Router)
+- Next.js (Roteador de Aplicativos)
 
 - Prisma ORM
 
-- Zod (form validation)
+- Zod (validação de formulários)
 
-- bcrypt-ts (password hashing)
+- bcrypt-ts (hash de senhas)
 
 - React Hooks
 
-- next-intl (internationalization)
+- next-intl (internacionalização)
 
-- lucide-react (icons)
-
----
-
-## 💡 Notes
-
-- The registration is one-time only: only allowed if no admin exists.
-
-- The role field is fixed to ADMIN to prevent arbitrary user types.
-
-- All texts are localized using next-intl for multi-language support.
+- lucide-react (ícones)
 
 ---
 
-## 🧩 Overview
+## 💡 Observações
 
-This login module includes:
+- O registro é único: permitido somente se não houver um administrador.
 
-- A server component (LoginPage) that wraps the login form in a Suspense boundary.
+- O campo de função foi corrigido para ADMIN para evitar tipos de usuários arbitrários.
 
-- A client component (LoginClient) that renders the form.
-
-- A server action (loginUser) that handles user authentication securely on the server side.
+- Todos os textos são localizados usando next-intl para suporte a vários idiomas.
 
 ---
 
-### 📁 File Structure
+## 🧩 Visão geral
+
+Este módulo de login inclui:
+
+- Um componente de servidor (LoginPage) que envolve o formulário de login em um limite Suspense.
+
+- Um componente de cliente (LoginClient) que renderiza o formulário.
+
+- Uma ação de servidor (loginUser) que lida com a autenticação do usuário com segurança no lado do servidor.
+
+---
+
+### 📁 Estrutura do arquivo
 
 ```pgsql
 
@@ -188,7 +192,7 @@ This login module includes:
 
 ---
 
-1. 🧠 LoginPage – Server Component
+1. 🧠 LoginPage – Componente do Servidor
 
 ```tsx
 
@@ -210,43 +214,43 @@ export default function LoginPage() {
 
 ---
 
-# 2. 🧾 LoginClient – Login Form (Client Component)
+# 2. 🧾 LoginClient – ​​Formulário de Login (Componente Cliente)
 
-### Features:
+### Recursos:
 
-- Controlled inputs with useState.
+- Entradas controladas com useState.
 
-- Validation error messages via state.errors.
+- Mensagens de erro de validação via state.errors.
 
-- Password visibility toggle.
+- Alternância de visibilidade da senha.
 
-- Loading feedback while submitting.
+- Carregamento de feedback durante o envio.
 
-- Internationalization via next-intl.
+- Internacionalização via `next-intl`.
 
-- Redirects to /dashboard on success.
+- Redirecionamento para `/dashboard` em caso de sucesso.
 
-### Hooks used:
+### Ganchos utilizados:
 
-- useActionState() → Executes loginUser.
+- useActionState() → Executa loginUser.
 
-- useEffect() → Handles URL query params (like ?status=...).
+- useEffect() → Manipula parâmetros de consulta de URL (como ?status=...).
 
-- useRef() → For setting input focus.
+- useRef() → Para definir o foco da entrada.
 
-- useRouter() → To programmatically redirect.
+- useRouter() → Para redirecionar programaticamente.
 
-### Flow:
+### Fluxo:
 
-- User fills the form → submits it.
+- O usuário preenche o formulário → o envia.
 
-- Calls the loginUser server action via useActionState.
+- Chama a ação do servidor loginUser via useActionState.
 
-- Handles validation errors, messages, and redirection based on result.
+- Trata erros de validação, mensagens e redirecionamentos com base no resultado.
 
 ---
 
-# 3. 🔐 loginUser – Server Action
+# 3. 🔐 loginUser – Ação do Servidor
 
 ```ts
 
@@ -287,77 +291,77 @@ export async function loginUser(state: FormStateLoginUser, formData: FormData): 
 
 ```
 
-### Key Logic:
+### Lógica-chave:
 
-- Validates email and password using Zod schema.
+- Valida e-mail e senha usando o esquema Zod.
 
-- Finds the user in the Prisma database.
+- Encontra o usuário no banco de dados Prisma.
 
-- Compares hashed password using bcrypt-ts.
+- Compara senhas com hash usando bcrypt-ts.
 
-- If successful, creates a session.
+- Se bem-sucedido, cria uma sessão.
 
-- Returns validation errors, warnings, or a success message.
-
----
-
-# ✅ Requirements
-
-To make everything work, ensure you have:
-
-- ✅ zod for validation (signInSchema).
-
-- ✅ bcrypt-ts for password hashing/comparison.
-
-- ✅ prisma and a User model with fields: email, password, deletedAt.
-
-- ✅ Session handling with createSession(user.id).
+- Retorna erros de validação, avisos ou uma mensagem de sucesso.
 
 ---
 
-# 🧪 How to Test
+# ✅ Requisitos
 
-1. Login Failure: Try with invalid credentials → You should see an error.
+Para que tudo funcione, certifique-se de ter:
 
-2. Prefilled email: Visit a URL like ?email=test@example.com&status=created → The form is prefilled and a message is shown.
+- ✅ `zod` para validação (`signInSchema`).
 
-3. Password Toggle: Click the eye icon to toggle password visibility.
+- ✅ `bcrypt-ts` para hash/comparação de senhas.
 
-4. Forgot Password: Link appears only when status is not set.
+- ✅ prisma e um modelo User com os campos: `email`, `password`, `deletedAt`.
 
-5. Success: On correct login, redirects to `/dashboard`.
-
----
-
-# 🛡️ Tutorial: JWT Authentication with HTTP-only Cookies in Next.js (App Router)
-
-This authentication system uses:
-
-- jose for JWT signing and verification
-
-- HTTP-only cookies for secure session storage
-
-- Next.js middleware for route protection
-
-- Prisma ORM to fetch authenticated user data
+- ✅ Manipulação de sessão com `createSession(user.id)`.
 
 ---
 
-# 🧱 Project Structure Overview
+# 🧪 Como Testar
 
-The system is divided into three key modules:
+1. Falha no Login: Tente com credenciais inválidas → Você deverá ver um erro.
 
-1. session.ts – Session management: create, verify, update, and decrypt JWTs
+2. E-mail pré-preenchido: Acesse uma URL como ?email=test@example.com&status=created → O formulário é pré-preenchido e uma mensagem é exibida.
 
-2. getUser.ts – Retrieves the current authenticated user from the database
+3. Alternar Senha: Clique no ícone de olho para alternar a visibilidade da senha.
 
-3. middleware.ts – Protects routes based on session state
+4. Esqueceu a Senha: O link aparece somente quando o status não está definido.
+
+5. Sucesso: Em caso de login correto, redireciona para `/dashboard`.
 
 ---
 
-# 📦 1. session.ts – Session Management with JWT
+# 🛡️ Tutorial: Autenticação JWT com Cookies Somente HTTP no Next.js (App Router)
 
-⚙️ Initial Setup
+Este sistema de autenticação utiliza:
+
+- jose para assinatura e verificação JWT
+
+- Cookies Somente HTTP para armazenamento seguro de sessões
+
+- Middleware Next.js para proteção de rotas
+
+- Prisma ORM para buscar dados de usuários autenticados
+
+---
+
+# 🧱 Visão Geral da Estrutura do Projeto
+
+O sistema é dividido em três módulos principais:
+
+1. session.ts – Gerenciamento de sessão: cria, verifica, atualiza e descriptografa JWTs
+
+2. getUser.ts – Recupera o usuário autenticado atual do banco de dados
+
+3. middleware.ts – Protege rotas com base no estado da sessão
+
+---
+
+# 📦 1. session.ts – Gerenciamento de Sessão com JWT
+
+### ⚙️ Configuração Inicial
 
 ```ts
 
@@ -372,33 +376,33 @@ const encodedKey = new TextEncoder().encode(secretKey);
 
 ```
 
-- Loads a secret key from the environment (`AUTH_SECRET`)
+- Carrega uma chave secreta do ambiente (`AUTH_SECRET`)
 
-- This key is used to sign and verify JWTs using `HS256` algorithm
+- Esta chave é usada para assinar e verificar JWTs usando o algoritmo `HS256`
 
 ---
 
-# 🔒 Token Lifetime Settings
+# 🔒 Configurações de vida útil do token
 
 ```ts
 
-const MAX_SESSION_AGE = 24 * 60 * 60;   // 24 hours
-const TOKEN_LIFETIME = 15 * 60;        // 15 minutes
-const RENEW_THRESHOLD = 5 * 60;        // 5 minutes
+const MAX_SESSION_AGE = 24 * 60 * 60;   // 24 horas
+const TOKEN_LIFETIME = 15 * 60;        // 15 minutos
+const RENEW_THRESHOLD = 5 * 60;        // 5 minutos
 
 ```
 
-- TOKEN_LIFETIME: Initial JWT lifespan
+- TOKEN_LIFETIME: Tempo de vida inicial do JWT
 
-- RENEW_THRESHOLD: If JWT has less than this time left, it gets refreshed
+- RENEW_THRESHOLD: Se o tempo restante do JWT for menor que esse, ele será atualizado.
 
-- MAX_SESSION_AGE: Absolute max session age (after which user must re-authenticate)
+- MAX_SESSION_AGE: Tempo máximo absoluto da sessão (após o qual o usuário deve se autenticar novamente).
 
 ---
 
 # 🔐 createSession(userId: string)
 
-Generates a signed JWT (`valid for 15 minutes`) and sets it in a secure, `HTTP-only` cookie named `sessionAuth`.
+Gera um JWT assinado (`válido por 15 minutos`) e o define em um cookie seguro, `somente HTTP`, chamado `sessionAuth`.
 
 ```ts
 
@@ -424,23 +428,23 @@ export async function createSession(userId: string): Promise<void> {
 
 ```
 
-## Cookie attributes:
+## Atributos do cookie:
 
-  - `httpOnly`: not accessible from JavaScript (protects from XSS)
+- `httpOnly`: não acessível via JavaScript (protege contra XSS)
 
-  - `secure`: sent only over HTTPS
+- `secure`: enviado somente via HTTPS
 
-  - `sameSite: 'lax'`: mitigates CSRF
+- `sameSite: 'lax'`: atenua CSRF
 
-  - `expires`: 15 minutes from issuance
+- `expires`: 15 minutos após a emissão
 
-  - `path: '/'`: valid across the entire site
+- `path: '/'`: válido em todo o site
 
 ---
 
 # 🔎 decrypt(session: string)
 
-Decodes and verifies the JWT. Returns the payload or `null` if the token is invalid or expired.
+Decodifica e verifica o JWT. Retorna o payload ou `null` se o token for inválido ou expirado.
 
 ```ts
 
@@ -457,15 +461,15 @@ export async function decrypt(session: string | undefined = '') {
 
 ```
 
-- Verifies using HS256 with the shared secret
+- Verifica usando HS256 com o segredo compartilhado
 
-- Handles invalid or missing tokens gracefully
+- Lida com tokens inválidos ou ausentes com elegância
 
 ---
 
 # ✅ verifySession()
 
-Checks if a valid session exists. If not, redirects the user to `/login`.
+Verifica se existe uma sessão válida. Caso contrário, redireciona o usuário para `/login`.
 
 ```ts
 
@@ -479,15 +483,15 @@ export async function verifySession(): Promise<{ isAuth: boolean; userId: string
 
 ```
 
-- Returns `{ isAuth: true, userId }` if authenticated
+- Retorna `{ isAuth: true, userId }` se autenticado
 
-- Otherwise, calls `redirect('/login')`
+- Caso contrário, chama `redirect('/login')`
 
 ---
 
 # 🧾 getSession()
 
-Returns the session payload if present and valid, without triggering a redirect.
+Retorna o payload da sessão, se presente e válido, sem acionar um redirecionamento.
 
 ```ts
 
@@ -499,13 +503,13 @@ export async function getSession() {
 
 ```
 
-- Useful for optional authentication or background checks
+- Útil para autenticação opcional ou verificações de antecedentes
 
 ---
 
 # 🔄 updateSession()
 
-Renews the session cookie if it's about to expire and within allowed max session age.
+Renova o cookie de sessão se estiver prestes a expirar e dentro do tempo máximo permitido para a sessão.
 
 ```ts
 
@@ -550,15 +554,15 @@ export async function updateSession() {
 
 ```
 
-## Renewal Logic:
+## Lógica de Renovação:
 
-Checks how much time is left on the current token (`timeLeft`)
+Verifica quanto tempo resta no token atual (`timeLeft`)
 
-If `timeLeft < RENEW_THRESHOLD`, creates a new token without changing the original `iat`
+Se `timeLeft < RENEW_THRESHOLD`, cria um novo token sem alterar o `iat` original
 
-Ensures sessions cannot be extended indefinitely by refreshing within `MAX_SESSION_AGE`
+Garante que as sessões não possam ser estendidas indefinidamente atualizando dentro de `MAX_SESSION_AGE`
 
-If `MAX_SESSION_AGE` is exceeded, the session is deleted and the user is logged out
+Se `MAX_SESSION_AGE` for excedido, a sessão será excluída e o usuário será desconectado
 
 ```ts
 
@@ -568,7 +572,7 @@ If `MAX_SESSION_AGE` is exceeded, the session is deleted and the user is logged 
 
 ---
 
-# 👤 2. getUser.ts – Fetch Authenticated User
+# 👤 2. getUser.ts – Obter usuário autenticado
 
 ```ts
 
@@ -583,7 +587,7 @@ import { verifySession } from './session';
 
 # 📥 getUser()
 
-Fetches the user from the database using the ID from the session.
+Obtém o usuário no banco de dados usando o ID da sessão.
 
 ```ts
 
@@ -594,17 +598,17 @@ export const getUser = cache(async () => {
 
 ```
 
-- Uses Prisma to get user details
+- Utiliza Prisma para obter detalhes do usuário
 
-- Wrapped in cache() for server component efficiency
+- Encapsulado em cache() para eficiência dos componentes do servidor
 
 ---
 
-# 🛡️ 3. middleware.ts – Route Protection with JWT and Role-Based Access
+# 🛡️ 3. middleware.ts – Proteção de Rota com JWT e Acesso Baseado em Função
 
-This middleware protects routes based on session presence and user role.
+Este middleware protege rotas com base na presença da sessão e na função do usuário.
 
-## 📄 Middleware Code (Latest Version)
+## 📄 Código do Middleware (Versão Mais Recente)
 
 ```ts
 
@@ -644,18 +648,18 @@ export const config = {
 
 ---
 
-## 🔍 Route Behavior Overview
+## 🔍 Visão geral do comportamento da rota
 
-| Route       | Type                             | Condition	Behavior                                          |
-|-------------|----------------------------------|--------------------------------------------------------------|
-| Public	    | `/login`, `/`	                   | Redirects to `/dashboard` if session exists                  |
-| Protected	  | Routes under `/dashboard`	       | Requires valid session (`userId`) or redirects to login      |
-| Admin-only	| Routes under `/dashboard/admins` | Requires role = `'ADMIN'`, otherwise redirects to `/dashboa` |
+| Rota                  | Tipo                             | Condição Comportamental                                                 |
+|-----------------------|----------------------------------|-------------------------------------------------------------------------|
+| Pública        	      | `/login`, `/`	                   | Redireciona para `/dashboard` se a sessão existir                       |
+| Protegida	            | Routes under `/dashboard`	       | Requer sessão válida (`userId`) ou redireciona para login               |
+| Somente administrador	| Routes under `/dashboard/admins` | Requer função = `'ADMIN'`, caso contrário redireciona para `/dashboard` |
 
 ---
 
 # ⚙️ Middleware Matcher
-This config ensures the middleware only runs on relevant routes, skipping static assets and API endpoints:
+Esta configuração garante que o middleware seja executado apenas em rotas relevantes, ignorando ativos estáticos e endpoints de API:
 
 ```ts
 
@@ -667,16 +671,16 @@ export const config = {
 
 ```
 
-- <strong>Excludes</strong>: API routes, Next.js static assets, media, and SEO files
+- <strong>Exclui</strong>: Rotas de API, ativos estáticos Next.js, mídia e arquivos de SEO
 
-- <strong>Applies to</strong>: All other pages (including dynamic ones)
+- <strong>Aplica-se a</strong>: Todas as outras páginas (incluindo as dinâmicas)
 
 ---
 
-# ✅ How to Use It in Your App
+# ✅ Como usar em seu aplicativo
 
-### 1. Environment Variable
-In your .env file:
+### 1. Variável de ambiente
+No seu arquivo .env:
 
  ```ini
 
@@ -684,13 +688,13 @@ In your .env file:
 
 ```
 
-Use a strong, random secret
+Use um segredo forte e aleatório
 
 ---
 
-### 2. Login Example
+### 2. Exemplo de Login
 
-When a user logs in successfully:
+Quando um usuário efetua login com sucesso:
 
 ```ts
 
@@ -701,9 +705,9 @@ redirect('/dashboard');
 
 ---
 
-### 3. Logout Example
+### 3. Exemplo de Logout
 
-To destroy the session:
+Para encerrar a sessão:
 
 ```ts
 
@@ -714,7 +718,7 @@ redirect('/login');
 
 ---
 
-### 4. Use getUser() in Server Components
+### 4. Use getUser() em componentes do servidor
 
 ```tsx
 
@@ -730,35 +734,35 @@ export default async function DashboardPage() {
 
 ---
 
-# 🔐 Security Notes
+# 🔐 Notas de Segurança
 
-- JWT is stored in a secure httpOnly cookie → not accessible to JS
+- O JWT é armazenado em um cookie httpOnly seguro → não acessível ao JS
 
-- Tokens are short-lived (15 min) and auto-renewed
+- Os tokens têm vida curta (15 minutos) e são renovados automaticamente
 
-- Session renewal is handled transparently in middleware
+- A renovação da sessão é tratada de forma transparente no middleware
 
-- All protected routes are checked on every request server-side
-
----
-
-# 📌 Summary
-
-This setup provides:
-
-- Secure session-based authentication with JWT
-
-- Route protection using middleware
-
-- Prisma-based user management
-
-- Automatic session renewal
+- Todas as rotas protegidas são verificadas a cada solicitação no lado do servidor
 
 ---
 
-#### Exchange examples:
+# 📌 Resumo
 
-- To use the card layout:
+Esta configuração oferece:
+
+- Autenticação segura baseada em sessão com JWT
+
+- Proteção de rota usando middleware
+
+- Gerenciamento de usuários baseado em Prisma
+
+- Renovação automática de sessão
+
+---
+
+#### Exemplos de troca:
+
+- Para usar o layout do cartão:
 
 ```tsx
 
@@ -774,7 +778,7 @@ import AuthLayoutTemplate from '@/components/layouts/auth/auth-card-layout';
 
 ---
 
-- To use the simple layout:
+- Para usar o layout simples:
 
 ```tsx
 
@@ -790,7 +794,7 @@ import AuthLayoutTemplate from '@/components/layouts/auth/auth-simple-layout';
 
 ---
 
-- To use the split layout:
+- Para usar o layout dividido:
 
 ```tsx
 
@@ -806,52 +810,52 @@ import AuthLayoutTemplate from '@/components/layouts/auth/auth-split-layout';
 
 ---
 
-### ✅ Nothing else needs to be changed!
+### ✅ Nada mais precisa ser alterado!
 
-- The component will continue to function normally. The change only affects the appearance of the authentication page.
+- O componente continuará funcionando normalmente. A alteração afeta apenas a aparência da página de autenticação.
 
 ---
 
 ### 🔐 Requisitos
 
-- Each of the templates requires:
+- Cada um dos modelos requer:
 
-Applying the layout with `children`, `title`, and `description` passing the correct properties to the selected layout.
+Aplicar o layout com `children`, `title` e `description`, passando as propriedades corretas para o layout selecionado.
 
 ---
 
-### 🧭 Application Layout Templates
+### 🧭 Modelos de layout de aplicativos
 
 > **Page:** `/components/layouts/app-layout.tsx`
 
 ---
 
-#### Features:
-- Changing templates for the main application layout (`AppLayout`).
-- Authentication support with `next-auth`: layout is only rendered if there is an active session.
-- Templates receive `user` and `breadcrumbs` as props.
-- Child components (`children`) are rendered within the selected layout.
+#### Recursos:
+- Alteração de modelos para o layout principal do aplicativo (`AppLayout`).
+- Suporte à autenticação com `next-auth`: o layout só é renderizado se houver uma sessão ativa.
+- Os modelos recebem `user` e `breadcrumbs` como propriedades.
+- Os componentes filhos (`children`) são renderizados dentro do layout selecionado.
 
 ---
 
-### 📁 Available templates
+### 📁 Modelos disponíveis
 
-| Template              | Description                                                             |
-|-----------------------|-------------------------------------------------------------------------|
-| `app-sidebar-layout`  | Layout with navigation sidebar — ideal for dashboards and complex apps. |
-| `app-header-layout`   | Fixed header layout at the top — more compact and straightforward.      |
-
----
-
-### 🔁 How to switch between templates
-
-To change the application's main layout template, **simply replace the layout import** in the `app-layout.tsx` file.
+| Modelo                | Descrição                                                                           |
+|-----------------------|-------------------------------------------------------------------------------------|
+| `app-sidebar-layout`  | Layout com barra lateral de navegação — ideal para painéis e aplicativos complexos. |
+| `app-header-layout`   | Layout de cabeçalho fixo na parte superior — mais compacto e direto.                |
 
 ---
 
-#### Exchange examples:
+### 🔁 Como alternar entre modelos
 
-- To use the sidebar layout:
+Para alterar o modelo de layout principal do aplicativo, **basta substituir a importação de layout** no arquivo `app-layout.tsx`.
+
+---
+
+#### Exemplos de troca:
+
+- Para usar o layout da barra lateral:
 
 ```tsx
 
@@ -867,7 +871,7 @@ import AppLayoutTemplate from '@/components/layouts/app/app-sidebar-layout';
 
 ---
 
-- To use the header layout:
+- Para usar o layout do cabeçalho:
 
 ```tsx
 
@@ -883,13 +887,13 @@ import AppLayoutTemplate from '@/components/layouts/app/app-header-layout';
 
 ---
 
-### ✅ Nothing else needs to be changed
+### ✅ Nada mais precisa ser alterado
 
-The structure remains the same. The `AppLayout` component renders the chosen layout based on the import, passing in `user`, `breadcrumbs`, and `children`.
+A estrutura permanece a mesma. O componente `AppLayout` renderiza o layout escolhido com base na importação, passando `user`, `breadcrumbs` e `children`.
 
 ---
 
-### 🔒 layout Administrator
+### 🔒 Administrador de layout
 
 <div align="center">
 
@@ -923,9 +927,9 @@ The structure remains the same. The `AppLayout` component renders the chosen lay
 
 ---
 
-## Install packages
+## Instalar pacotes
 
-Node version 20+
+Versão do Node 20+
 
 Postgres 16+
 
@@ -938,7 +942,6 @@ git clone -b preview-staging https://github.com/HumbertoFox/next-auth-start-kit.
 ```
 
 ---
-
 
 ```bash
 
@@ -983,7 +986,7 @@ npx prisma migrate dev
 
 ---
 
-### Developed in:
+### Desenvolvido em:
 
 ---
 
