@@ -4,15 +4,10 @@
 
 # BetoFoxNet
 
-
   <a href="https://nextjs.org/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg" width="130px" alt="Icon NextJs" /></a>
 
 ## Sobre NextJS
 ### Autenticação!
-
----
-
-## 📚 Traduções: [English](README.en.md)
 
 </div>
 
@@ -959,7 +954,7 @@ npm install
 
 ---
 
-### Environment Variables
+### Variáveis ​​de ambiente
 
 ---
 
