@@ -48,8 +48,9 @@ function getVisiblePages(current: number, total: number): (number | string)[] {
 }
 
 export default async function Users(props: { searchParams?: Promise<{ page?: number; }>; }) {
-    const searchParams = await props.searchParams;
-    const currentPage = searchParams?.page || 1;
+    const params = await props.searchParams;
+    const rawPage = parseInt(String(params?.page ?? '1'), 10);
+    const currentPage = Number.isNaN(rawPage) ? 1 : Math.max(1, rawPage);
     const [users, totalUsers] = await Promise.all([
         prisma.user.findMany({
             where: {
