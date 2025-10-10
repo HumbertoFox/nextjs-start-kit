@@ -1,9 +1,9 @@
 {
     "name": "nextjs-starter-kit",
-    "description": "Adapter nextjs-starter-kit.",
+    "description": "Adaptador nextjs-starter-kit.",
     "author": "Next.Js",
     "quote": {
-        "message": "Build things that matter Next.Js.",
+        "message": "Crie coisas que importam Next.Js.",
         "author": "Next.Js"
     }
 }
