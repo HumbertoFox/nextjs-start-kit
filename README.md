@@ -12,7 +12,7 @@
 </div>
 
 ## 👤 Página de registro do administrador (Next.js + Prisma)
-Este projeto inclui uma página de registro de administrador protegida. O formulário só é acessível se ainda não houver um usuário administrador no banco de dados. Ele foi desenvolvido com Next.js App Router, Prisma, bcrypt-ts, React Hooks e validação Zod.
+Este projeto inclui uma página de registro de administrador protegida. O formulário só é acessível se ainda não houver um usuário administrador no banco de dados. Ele foi desenvolvido com Next.js App Router, Prisma, bcrypt-ts, React Hooks, shadcn-ui e validação Zod.
 
 ## 📁 Estrutura do arquivo
 
@@ -146,8 +146,6 @@ Se não houver um administrador, o formulário será exibido. Caso contrário, v
 
 - React Hooks
 
-- next-intl (internacionalização)
-
 - lucide-react (ícones)
 
 ---
@@ -220,8 +218,6 @@ export default function LoginPage() {
 - Alternância de visibilidade da senha.
 
 - Carregamento de feedback durante o envio.
-
-- Internacionalização via `next-intl`.
 
 - Redirecionamento para `/dashboard` em caso de sucesso.
 
