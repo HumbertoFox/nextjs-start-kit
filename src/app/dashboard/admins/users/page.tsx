@@ -6,6 +6,7 @@ import { Icon } from '@/components/ui/icon';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import getVisiblePagination from '@/lib/getvisiblepagination';
 import prisma from '@/lib/prisma';
 import { UserPen, UserX } from 'lucide-react';
 import { Metadata } from 'next';
@@ -18,34 +19,6 @@ export const generateMetadata = async (): Promise<Metadata> => {
 };
 
 const pageSize = 10;
-
-function getVisiblePages(current: number, total: number): (number | string)[] {
-    const delta = 2;
-    const range: (number | string)[] = [];
-
-    const start = Math.max(2, current - delta);
-    const end = Math.min(total - 1, current + delta);
-
-    range.push(1);
-
-    if (start > 2) {
-        range.push('...');
-    }
-
-    for (let i = start; i <= end; i++) {
-        range.push(i);
-    }
-
-    if (end < total - 1) {
-        range.push('...');
-    }
-
-    if (total > 1) {
-        range.push(total);
-    }
-
-    return range;
-}
 
 export default async function Users(props: { searchParams?: Promise<{ page?: number; }>; }) {
     const params = await props.searchParams;
@@ -173,7 +146,7 @@ export default async function Users(props: { searchParams?: Promise<{ page?: num
                             className={currentPage <= 1 ? 'pointer-events-none opacity-50' : ''}
                         />
                     </PaginationItem>
-                    {getVisiblePages(currentPage, totalPages).map((page, index) => (
+                    {getVisiblePagination(currentPage, totalPages).map((page, index) => (
                         <PaginationItem key={index}>
                             {page === '...' ? (
                                 <PaginationLink
