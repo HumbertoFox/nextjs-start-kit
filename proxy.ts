@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { updateSession } from './lib/session';
+import { updateSession } from './src/lib/session';
 
-export default async function middleware(req: NextRequest) {
+export default async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
   const isProtectedRoute = path.startsWith('/dashboard');
