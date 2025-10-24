@@ -1,4 +1,4 @@
-import RegisterUserForm from '@/app/dashboard/(protected)/admins/form-register-user';
+import RegisterUserForm from '@/app/dashboard/admins/form-register-user';
 import RegisterUserBreadcrumb from '@/components/breadcrumbs/register-user-breadcrumb';
 import { Metadata } from 'next';
 
