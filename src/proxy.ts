@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { updateSession } from './lib/session';
+import { updateSession } from '@/lib/session';
 
 export default async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
