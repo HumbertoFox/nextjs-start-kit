@@ -57,7 +57,7 @@ export default async function Users(props: { searchParams?: Promise<{ page?: num
                         </div>
                     ))}
                 </div>
-                <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border md:min-h-min">
+                <div className="border-sidebar-border/70 dark:border-sidebar-border relative min-h-screen flex-1 overflow-hidden rounded-xl border md:min-h-min">
                     <Table className="w-full text-center">
                         <TableHeader>
                             <TableRow className="cursor-default">
