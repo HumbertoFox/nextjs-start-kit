@@ -11,7 +11,7 @@ export default function LoadingLoginCard() {
                 <Skeleton className="flex h-9 w-9 mx-auto rounded-full" />
 
                 <div className="flex flex-col gap-6">
-                    <Card className="w-full max-w-[448px] max-h-[430px] h-screen rounded-xl">
+                    <Card className="w-full max-w-md max-h-[430px] h-screen rounded-xl">
                         <div className="grid justify-items-center gap-4 pt-10">
                             <Skeleton className="h-5 w-64" />
                             <Skeleton className="h-3.5 w-80" />

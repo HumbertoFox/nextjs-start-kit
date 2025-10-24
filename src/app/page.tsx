@@ -19,7 +19,7 @@ export default async function Welcome() {
   });
   const session = await getSession();
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 font-[family-name:var(--font-geist-sans)]">
+    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 font-family-name:var(--font-geist-sans)">
       <header className="mb-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-[1440px]">
         <nav className="flex items-center justify-end gap-4">
           {session ? (

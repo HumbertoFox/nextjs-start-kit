@@ -53,7 +53,7 @@ export default function HomeMainComponent() {
     return (
         <main
             ref={containerRef}
-            className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start max-w-[1440px]"
+            className="flex flex-col gap-8 row-start-2 items-center sm:items-start max-w-[1440px]"
         >
             <div className="logo opacity-0">
                 <Image
@@ -65,10 +65,10 @@ export default function HomeMainComponent() {
                     priority
                 />
             </div>
-            <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
+            <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-family-name:var(--font-geist-mono)">
                 <li className="list-item mb-2 tracking-[-.01em] opacity-0">
                     Comece editando&nbsp;
-                    <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
+                    <code className="bg-black/5 dark:bg-white/6 px-1 py-0.5 rounded font-family-name:var(--font-geist-mono) font-semibold">
                         src/app/page.tsx
                     </code>
                     .
@@ -95,7 +95,7 @@ export default function HomeMainComponent() {
                     Implantar agora
                 </a>
                 <a
-                    className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm text-center sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
+                    className="rounded-full border border-solid border-black/8 dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm text-center sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
                     href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
                     target="_blank"
                     rel="noopener noreferrer"
