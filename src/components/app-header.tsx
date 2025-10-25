@@ -17,14 +17,21 @@ import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
 const activeItemStyles = 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100';
 
 export function AppHeader({ user }: { user: User }) {
+    const [isOpen, setIsOpen] = useState(false);
     const isAdmin = user.role === 'ADMIN';
-    const pathName = usePathname();
+    const pathname = usePathname();
     const getInitials = useInitials();
 
+    const handleLinkClick = (href: string) => {
+        if (pathname !== href) {
+            setIsOpen(false);
+        };
+    };
     const mainNavItems: NavItem[] = [
         { title: 'Painel', href: '/dashboard', icon: LayoutGrid },
     ];
@@ -45,7 +52,7 @@ export function AppHeader({ user }: { user: User }) {
                 <div className="mx-auto flex h-16 items-center px-4 md:max-w-7xl">
                     {/* Mobile Menu */}
                     <div className="lg:hidden">
-                        <Sheet>
+                        <Sheet open={isOpen} onOpenChange={setIsOpen}>
                             <SheetTrigger asChild>
                                 <Button variant="ghost" size="icon" className="mr-2 h-[34px] w-[34px]">
                                     <Menu className="h-5 w-5" />
@@ -60,7 +67,7 @@ export function AppHeader({ user }: { user: User }) {
                                     <div className="flex h-full flex-col justify-between text-sm">
                                         <div className="flex flex-col space-y-4">
                                             {navItems.map((item) => (
-                                                <Link key={item.title} href={item.href} className="flex items-center space-x-2 font-medium">
+                                                <Link key={item.title} href={item.href} prefetch onClick={() => handleLinkClick(item.href)} className="flex items-center space-x-2 font-medium">
                                                     {item.icon && <Icon iconNode={item.icon} className="h-5 w-5" />}
                                                     <span>{item.title}</span>
                                                 </Link>
@@ -102,13 +109,13 @@ export function AppHeader({ user }: { user: User }) {
                                             title={item.title}
                                             className={cn(
                                                 navigationMenuTriggerStyle(),
-                                                pathName === item.href && activeItemStyles,
+                                                pathname === item.href && activeItemStyles,
                                                 'h-9 cursor-pointer px-3',
                                             )}
                                         >
                                             {item.icon && <Icon iconNode={item.icon} className="h-4 w-4" />}
                                         </Link>
-                                        {pathName === item.href && (
+                                        {pathname === item.href && (
                                             <div className="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white" />
                                         )}
                                     </NavigationMenuItem>
