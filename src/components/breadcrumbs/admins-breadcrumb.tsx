@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useBreadcrumbs } from '@/context/breadcrumb-context';
 
-export default function AdminsBreadcrumbs() {
+export default function AdminsBreadcrumb() {
     const { setBreadcrumbs } = useBreadcrumbs();
     useEffect(() => {
         setBreadcrumbs([

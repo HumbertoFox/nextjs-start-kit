@@ -5,7 +5,7 @@ import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { UserRoundPen, UserRoundX } from 'lucide-react';
 import Link from 'next/link';
-import AdminsBreadcrumbs from '@/components/breadcrumbs/admins-breadcrumbs';
+import AdminsBreadcrumb from '@/components/breadcrumbs/admins-breadcrumb';
 import prisma from '@/lib/prisma';
 import { getUser } from '@/lib/dal';
 import { deleteUserById } from '@/app/api/actions/deleteadminuser';
@@ -33,7 +33,7 @@ export default async function Admins() {
     });
     return (
         <>
-            <AdminsBreadcrumbs />
+            <AdminsBreadcrumb />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                     {[...Array(3)].map((_, index) => (
