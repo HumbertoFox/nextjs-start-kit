@@ -1,9 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { reactivateAdminUserById } from '@/app/api/actions/reactivateadminuser';
 import { Icon } from '@/components/ui/icon';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { UserRoundPen, UserRoundX } from 'lucide-react';
+import { UserLock, UserRoundPen, UserRoundX } from 'lucide-react';
 import Link from 'next/link';
 import AdminsBreadcrumb from '@/components/breadcrumbs/admins-breadcrumb';
 import prisma from '@/lib/prisma';
@@ -23,12 +24,12 @@ export default async function Admins() {
     const admins = await prisma.user.findMany({
         where: {
             role: 'ADMIN',
-            deletedAt: null
         },
         select: {
             id: true,
             name: true,
-            email: true
+            email: true,
+            deletedAt: true,
         }
     });
     return (
@@ -66,54 +67,73 @@ export default async function Admins() {
                                     <TableCell className="max-lg:hidden">{admin.name}</TableCell>
                                     <TableCell>{admin.email}</TableCell>
                                     <TableCell className="flex justify-evenly items-center my-1">
-                                        <Link
-                                            href={admin.id === loggedAdmin ? '/dashboard/settings/profile' : `/dashboard/admins/${admin.id}/update`}
-                                            title={`Atualizar ${admin.name}`}
-                                        >
-                                            <Icon
-                                                iconNode={UserRoundPen}
-                                                aria-label={`Atualizar ${admin.name}`}
-                                                className="size-6 text-yellow-600 hover:text-yellow-500 duration-300"
-                                            />
-                                        </Link>
+                                        {!admin.deletedAt ? (
+                                            <>
+                                                <Link
+                                                    href={admin.id === loggedAdmin ? '/dashboard/settings/profile' : `/dashboard/admins/${admin.id}/update`}
+                                                    title={`Atualizar ${admin.name}`}
+                                                >
+                                                    <Icon
+                                                        iconNode={UserRoundPen}
+                                                        aria-label={`Atualizar ${admin.name}`}
+                                                        className="size-6 text-yellow-600 hover:text-yellow-500 duration-300"
+                                                    />
+                                                </Link>
 
-                                        <Dialog>
-                                            <DialogTrigger asChild>
-                                                {admin.id !== loggedAdmin && (
-                                                    <button type="button" title={`Excluir ${admin.name}`}>
-                                                        <Icon
-                                                            iconNode={UserRoundX}
-                                                            aria-label={`Excluir ${admin.name}`}
-                                                            className="size-6 text-red-600 cursor-pointer hover:text-red-500 duration-300"
-                                                        />
-                                                    </button>
-                                                )}
-                                            </DialogTrigger>
-                                            <DialogContent>
-                                                <DialogTitle>
-                                                    você tem certeza?
-                                                </DialogTitle>
-                                                <DialogDescription>
-                                                    Depois de confirmar, você não poderá reverter esta ação!
-                                                </DialogDescription>
-                                                <DialogFooter>
-                                                    <DialogClose asChild>
-                                                        <Button type="button" variant="secondary">
-                                                            Cancelar
-                                                        </Button>
-                                                    </DialogClose>
-                                                    <form action={deleteUserById}>
-                                                        <input type="hidden" name="userId" value={admin.id} />
-                                                        <Button
-                                                            type="submit"
-                                                            variant="destructive"
-                                                        >
-                                                            Sim, Excluir!
-                                                        </Button>
-                                                    </form>
-                                                </DialogFooter>
-                                            </DialogContent>
-                                        </Dialog>
+                                                <Dialog key={admin.id}>
+                                                    <DialogTrigger asChild>
+                                                        {admin.id !== loggedAdmin && (
+                                                            <button type="button" title={`Excluir ${admin.name}`}>
+                                                                <Icon
+                                                                    iconNode={UserRoundX}
+                                                                    aria-label={`Excluir ${admin.name}`}
+                                                                    className="size-6 text-red-600 cursor-pointer hover:text-red-500 duration-300"
+                                                                />
+                                                            </button>
+                                                        )}
+                                                    </DialogTrigger>
+                                                    <DialogContent>
+                                                        <DialogTitle>
+                                                            você tem certeza?
+                                                        </DialogTitle>
+                                                        <DialogDescription>
+                                                            Depois de confirmar, você não poderá reverter esta ação!
+                                                        </DialogDescription>
+                                                        <DialogFooter>
+                                                            <DialogClose asChild>
+                                                                <Button type="button" variant="secondary">
+                                                                    Cancelar
+                                                                </Button>
+                                                            </DialogClose>
+                                                            <form action={deleteUserById}>
+                                                                <input type="hidden" name="userId" value={admin.id} />
+                                                                <Button
+                                                                    type="submit"
+                                                                    variant="destructive"
+                                                                >
+                                                                    Sim, Excluir!
+                                                                </Button>
+                                                            </form>
+                                                        </DialogFooter>
+                                                    </DialogContent>
+                                                </Dialog>
+                                            </>
+                                        ) : (
+                                            <form action={reactivateAdminUserById}>
+                                                <input type="hidden" name="userId" value={admin.id} />
+                                                <button
+                                                    type="submit"
+                                                    title={`Ativar ${admin.name}`}
+                                                    className="cursor-pointer"
+                                                >
+                                                    <Icon
+                                                        iconNode={UserLock}
+                                                        aria-label={`Arivar ${admin.name}`}
+                                                        className="size-6 text-red-600 hover:text-green-500 duration-300"
+                                                    />
+                                                </button>
+                                            </form>
+                                        )}
                                     </TableCell>
                                 </TableRow>
                             ))}

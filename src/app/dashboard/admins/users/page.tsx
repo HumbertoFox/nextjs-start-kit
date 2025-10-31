@@ -1,4 +1,5 @@
 import { deleteUserById } from '@/app/api/actions/deleteadminuser';
+import { reactivateAdminUserById } from '@/app/api/actions/reactivateadminuser';
 import UsersBreadcrumb from '@/components/breadcrumbs/users-breadcrumb';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -8,7 +9,7 @@ import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import getVisiblePagination from '@/lib/getvisiblepagination';
 import prisma from '@/lib/prisma';
-import { UserPen, UserX } from 'lucide-react';
+import { UserLock, UserPen, UserX } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -28,12 +29,12 @@ export default async function Users(props: { searchParams?: Promise<{ page?: num
         prisma.user.findMany({
             where: {
                 role: 'USER',
-                deletedAt: null
             },
             select: {
                 id: true,
                 name: true,
-                email: true
+                email: true,
+                deletedAt: true,
             },
             skip: (currentPage - 1) * pageSize,
             take: pageSize
@@ -81,55 +82,74 @@ export default async function Users(props: { searchParams?: Promise<{ page?: num
                                     <TableCell className="max-lg:hidden">{user.name}</TableCell>
                                     <TableCell>{user.email}</TableCell>
                                     <TableCell className="flex justify-evenly items-center my-1">
-                                        <Link
-                                            href={`/dashboard/admins/${user.id}/update`}
-                                            title={`Atualizar ${user.name}`}
-                                        >
-                                            <Icon
-                                                iconNode={UserPen}
-                                                aria-label={`Atualizar ${user.name}`}
-                                                className="size-6 text-yellow-600 hover:text-yellow-500 duration-300"
-                                            />
-                                        </Link>
-
-                                        <Dialog>
-                                            <DialogTrigger asChild>
-                                                <button
-                                                    type="button"
-                                                    title={`Excluir ${user.name}`}
+                                        {!user.deletedAt ? (
+                                            <>
+                                                <Link
+                                                    href={`/dashboard/admins/${user.id}/update`}
+                                                    title={`Atualizar ${user.name}`}
                                                 >
                                                     <Icon
-                                                        iconNode={UserX}
-                                                        aria-label={`Excluir ${user.name}`}
-                                                        className="size-6 text-red-600 cursor-pointer hover:text-red-500 duration-300"
+                                                        iconNode={UserPen}
+                                                        aria-label={`Atualizar ${user.name}`}
+                                                        className="size-6 text-yellow-600 hover:text-yellow-500 duration-300"
+                                                    />
+                                                </Link>
+
+                                                <Dialog key={user.id}>
+                                                    <DialogTrigger asChild>
+                                                        <button
+                                                            type="button"
+                                                            title={`Excluir ${user.name}`}
+                                                        >
+                                                            <Icon
+                                                                iconNode={UserX}
+                                                                aria-label={`Excluir ${user.name}`}
+                                                                className="size-6 text-red-600 cursor-pointer hover:text-red-500 duration-300"
+                                                            />
+                                                        </button>
+                                                    </DialogTrigger>
+                                                    <DialogContent>
+                                                        <DialogTitle>
+                                                            você tem certeza?
+                                                        </DialogTitle>
+                                                        <DialogDescription>
+                                                            Depois de confirmar, você não poderá reverter esta ação!
+                                                        </DialogDescription>
+                                                        <DialogFooter>
+                                                            <DialogClose asChild>
+                                                                <Button type="button" variant="secondary">
+                                                                    Cancelar
+                                                                </Button>
+                                                            </DialogClose>
+                                                            <form action={deleteUserById}>
+                                                                <input type="hidden" name="userId" value={user.id} />
+                                                                <Button
+                                                                    type="submit"
+                                                                    variant="destructive"
+                                                                >
+                                                                    Sim, Excluir!
+                                                                </Button>
+                                                            </form>
+                                                        </DialogFooter>
+                                                    </DialogContent>
+                                                </Dialog>
+                                            </>
+                                        ) : (
+                                            <form action={reactivateAdminUserById}>
+                                                <input type="hidden" name="userId" value={user.id} />
+                                                <button
+                                                    type="submit"
+                                                    title={`Ativar ${user.name}`}
+                                                    className="cursor-pointer"
+                                                >
+                                                    <Icon
+                                                        iconNode={UserLock}
+                                                        aria-label={`Arivar ${user.name}`}
+                                                        className="size-6 text-red-600 hover:text-green-500 duration-300"
                                                     />
                                                 </button>
-                                            </DialogTrigger>
-                                            <DialogContent>
-                                                <DialogTitle>
-                                                    você tem certeza?
-                                                </DialogTitle>
-                                                <DialogDescription>
-                                                    Depois de confirmar, você não poderá reverter esta ação!
-                                                </DialogDescription>
-                                                <DialogFooter>
-                                                    <DialogClose asChild>
-                                                        <Button type="button" variant="secondary">
-                                                            Cancelar
-                                                        </Button>
-                                                    </DialogClose>
-                                                    <form action={deleteUserById}>
-                                                        <input type="hidden" name="userId" value={user.id} />
-                                                        <Button
-                                                            type="submit"
-                                                            variant="destructive"
-                                                        >
-                                                            Sim, Excluir!
-                                                        </Button>
-                                                    </form>
-                                                </DialogFooter>
-                                            </DialogContent>
-                                        </Dialog>
+                                            </form>
+                                        )}
                                     </TableCell>
                                 </TableRow>
                             ))}

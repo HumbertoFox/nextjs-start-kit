@@ -39,7 +39,7 @@ export default function AuthSplitLayout({ children, title, description }: PropsW
                 </div>
                 <div className="flex items-center justify-center h-full z-10">
                     <div ref={logoRef} className="opacity-0">
-                        <AppLogoIcon className="size-50 fill-accent" />
+                        <AppLogoIcon className="size-50 fill-white dark:bg-black rounded-full" />
                     </div>
                 </div>
                 {quote && (
