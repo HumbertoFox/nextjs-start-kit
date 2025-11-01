@@ -34,6 +34,6 @@ export async function loginUser(state: FormStateLoginUser, formData: FormData): 
         return { message: 'Autenticação bem-sucedida! Redirecionando para o Painel, aguarde...' };
     } catch (error) {
         console.error('Unknown error occurred:', error);
-        return { warning: 'Ocorreu um erro desconhecidoAlgo deu errado. Tente novamente mais tarde.' };
+        return { warning: 'Algo deu errado. Tente novamente mais tarde.' };
     };
 }
