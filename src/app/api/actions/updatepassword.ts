@@ -5,6 +5,7 @@ import { FormStatePasswordUpdate, passwordUpdateSchema } from '@/lib/definitions
 import prisma from '@/lib/prisma';
 import { compare, hash } from 'bcrypt-ts';
 import { redirect } from 'next/navigation';
+import z from 'zod';
 
 export async function updatePassword(state: FormStatePasswordUpdate, formData: FormData): Promise<FormStatePasswordUpdate> {
     const validatedFields = passwordUpdateSchema.safeParse({
@@ -13,7 +14,7 @@ export async function updatePassword(state: FormStatePasswordUpdate, formData: F
         password_confirmation: formData.get('password_confirmation') as string
     });
 
-    if (!validatedFields.success) return { errors: validatedFields.error.flatten().fieldErrors, };
+    if (!validatedFields.success) return { errors: z.flattenError(validatedFields.error).fieldErrors };
 
     const { current_password, password } = validatedFields.data;
 

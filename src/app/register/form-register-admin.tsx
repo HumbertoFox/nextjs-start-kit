@@ -73,7 +73,7 @@ export default function RegisterAdmin() {
                             disabled={pending}
                             placeholder="Nome completo"
                         />
-                        {state?.errors?.name && <InputError message={state.errors.name} />}
+                        {state?.errors?.name?.[0] && <InputError message={state.errors.name[0]} />}
                     </div>
 
                     <div className="grid gap-2">
@@ -91,7 +91,7 @@ export default function RegisterAdmin() {
                             disabled={pending}
                             placeholder="email@exemplo.com"
                         />
-                        {state?.errors?.email && <InputError message={state.errors.email} />}
+                        {state?.errors?.email?.[0] && <InputError message={state.errors.email[0]} />}
                     </div>
 
                     <div className="grid gap-2">
@@ -117,7 +117,7 @@ export default function RegisterAdmin() {
                                 {showPassword ? <Icon iconNode={Eye} /> : <Icon iconNode={EyeClosed} />}
                             </button>
                         </div>
-                        {state?.errors?.password && <InputError message={state.errors.password} />}
+                        {state?.errors?.password?.[0] && <InputError message={state.errors.password[0]} />}
                     </div>
 
                     <div className="grid gap-2">
@@ -143,7 +143,7 @@ export default function RegisterAdmin() {
                                 {showPasswordConfirm ? <Icon iconNode={Eye} /> : <Icon iconNode={EyeClosed} />}
                             </button>
                         </div>
-                        {state?.errors?.password_confirmation && <InputError message={state.errors.password_confirmation} />}
+                        {state?.errors?.password_confirmation?.[0] && <InputError message={state.errors.password_confirmation[0]} />}
                     </div>
 
                     <Button

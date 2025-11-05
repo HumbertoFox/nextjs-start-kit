@@ -4,6 +4,7 @@ import prisma from '@/lib/prisma';
 import { FormStateLoginUser, signInSchema } from '@/lib/definitions';
 import { compare } from 'bcrypt-ts';
 import { createSession } from '@/lib/session';
+import z from 'zod';
 
 export async function loginUser(state: FormStateLoginUser, formData: FormData): Promise<FormStateLoginUser> {
     const validatedFields = signInSchema.safeParse({
@@ -11,7 +12,7 @@ export async function loginUser(state: FormStateLoginUser, formData: FormData): 
         password: formData.get('password') as string,
     });
 
-    if (!validatedFields.success) return { errors: validatedFields.error.flatten().fieldErrors, };
+    if (!validatedFields.success) return { errors: z.flattenError(validatedFields.error).fieldErrors };
 
     const { email, password } = validatedFields.data;
 

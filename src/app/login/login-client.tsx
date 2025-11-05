@@ -89,7 +89,7 @@ export default function Login() {
                             onChange={handleChange}
                             placeholder="email@exemplo.com"
                         />
-                        {state?.errors?.email && <InputError message={state.errors.email} />}
+                        {state?.errors?.email?.[0] && <InputError message={state.errors.email[0]} />}
                     </div>
 
                     <div className="grid gap-2">
@@ -123,7 +123,7 @@ export default function Login() {
                                 {isVisibledPassword ? <Icon iconNode={Eye} /> : <Icon iconNode={EyeClosed} />}
                             </button>
                         </div>
-                        {state?.errors?.password && <InputError message={state.errors.password} />}
+                        {state?.errors?.password?.[0] && <InputError message={state.errors.password[0]} />}
                     </div>
 
                     <Button type="submit" className="mt-4 w-full" tabIndex={4} disabled={pending}>

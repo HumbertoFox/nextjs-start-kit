@@ -4,11 +4,12 @@ import { getUser } from '@/lib/dal';
 import { deleteUserSchema, FormStateUserDelete } from '@/lib/definitions';
 import prisma from '@/lib/prisma';
 import * as bcrypt from 'bcrypt-ts';
+import z from 'zod';
 
 export async function deleteUser(state: FormStateUserDelete, formData: FormData): Promise<FormStateUserDelete> {
     const validatedFields = deleteUserSchema.safeParse({ password: formData.get('password') as string });
 
-    if (!validatedFields.success) return { errors: validatedFields.error.flatten().fieldErrors };
+    if (!validatedFields.success) return { errors: z.flattenError(validatedFields.error).fieldErrors };
 
     const { password } = validatedFields.data;
 

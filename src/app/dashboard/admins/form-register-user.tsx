@@ -114,7 +114,7 @@ export default function RegisterUserForm({ user, isEdit, valueButton }: Register
                         disabled={pending}
                         placeholder="Nome completo"
                     />
-                    {state?.errors?.name && <InputError message={state.errors.name} />}
+                    {state?.errors?.name?.[0] && <InputError message={state.errors.name[0]} />}
                 </div>
 
                 <div className="grid gap-2">
@@ -131,7 +131,7 @@ export default function RegisterUserForm({ user, isEdit, valueButton }: Register
                         disabled={pending}
                         placeholder="email@exemplo.com"
                     />
-                    {state?.errors?.email && <InputError message={state.errors.email} />}
+                    {state?.errors?.email?.[0] && <InputError message={state.errors.email[0]} />}
                 </div>
 
                 <div className="grid gap-2">
@@ -156,7 +156,7 @@ export default function RegisterUserForm({ user, isEdit, valueButton }: Register
                             {showPassword ? <Icon iconNode={Eye} /> : <Icon iconNode={EyeClosed} />}
                         </button>
                     </div>
-                    {state?.errors?.password && <InputError message={state.errors.password} />}
+                    {state?.errors?.password?.[0] && <InputError message={state.errors.password[0]} />}
                 </div>
 
                 <div className="grid gap-2">
@@ -181,7 +181,7 @@ export default function RegisterUserForm({ user, isEdit, valueButton }: Register
                             {showPasswordConfirm ? <Icon iconNode={Eye} /> : <Icon iconNode={EyeClosed} />}
                         </button>
                     </div>
-                    {state?.errors?.password_confirmation && <InputError message={state.errors.password_confirmation} />}
+                    {state?.errors?.password_confirmation?.[0] && <InputError message={state.errors.password_confirmation[0]} />}
                 </div>
 
                 <div className="grid gap-2">
@@ -209,7 +209,7 @@ export default function RegisterUserForm({ user, isEdit, valueButton }: Register
                             </SelectItem>
                         </SelectContent>
                     </Select>
-                    {state?.errors?.role && <InputError message={state.errors.role} />}
+                    {state?.errors?.role?.[0] && <InputError message={state.errors.role[0]} />}
                 </div>
                 <input type="hidden" name="role" value={data.role} />
 

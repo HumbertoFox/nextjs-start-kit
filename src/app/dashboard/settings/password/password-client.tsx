@@ -85,7 +85,7 @@ export default function PasswordPageClient() {
                                 {showOldPassword ? <Icon iconNode={Eye} /> : <Icon iconNode={EyeClosed} />}
                             </button>
                         </div>
-                        {state?.errors?.current_password && <InputError message={state.errors.current_password} />}
+                        {state?.errors?.current_password?.[0] && <InputError message={state.errors.current_password[0]} />}
                     </div>
 
                     <div className="grid gap-2">
@@ -112,7 +112,7 @@ export default function PasswordPageClient() {
                                 {showPassword ? <Icon iconNode={Eye} /> : <Icon iconNode={EyeClosed} />}
                             </button>
                         </div>
-                        {state?.errors?.password && <InputError message={state.errors.password} />}
+                        {state?.errors?.password?.[0] && <InputError message={state.errors.password[0]} />}
                     </div>
 
                     <div className="grid gap-2">
@@ -138,7 +138,7 @@ export default function PasswordPageClient() {
                                 {showPasswordConfirm ? <Icon iconNode={Eye} /> : <Icon iconNode={EyeClosed} />}
                             </button>
                         </div>
-                        {state?.errors?.password_confirmation && <InputError message={state.errors.password_confirmation} />}
+                        {state?.errors?.password_confirmation?.[0] && <InputError message={state.errors.password_confirmation[0]} />}
                     </div>
 
                     <div className="flex items-center gap-4">

@@ -4,6 +4,7 @@ import { getUser } from '@/lib/dal';
 import { FormStateUserUpdate, updateUserSchema } from '@/lib/definitions';
 import prisma from '@/lib/prisma';
 import { redirect } from 'next/navigation';
+import z from 'zod';
 
 export async function updateUser(state: FormStateUserUpdate, formData: FormData): Promise<FormStateUserUpdate> {
     const validatedFields = updateUserSchema.safeParse({
@@ -11,7 +12,7 @@ export async function updateUser(state: FormStateUserUpdate, formData: FormData)
         email: formData.get('email') as string,
     });
 
-    if (!validatedFields.success) return { errors: validatedFields.error.flatten().fieldErrors };
+    if (!validatedFields.success) return { errors: z.flattenError(validatedFields.error).fieldErrors };
 
     const { name, email } = validatedFields.data;
     const sessionUser = await getUser();

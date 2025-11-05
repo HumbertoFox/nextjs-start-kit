@@ -3,6 +3,7 @@
 import { FormStatePasswordReset, passwordResetSchema } from '@/lib/definitions';
 import prisma from '@/lib/prisma';
 import { hash } from 'bcrypt-ts';
+import z from 'zod';
 
 export async function resetPassword(state: FormStatePasswordReset, formData: FormData): Promise<FormStatePasswordReset> {
     const validatedFields = passwordResetSchema.safeParse({
@@ -12,7 +13,7 @@ export async function resetPassword(state: FormStatePasswordReset, formData: For
         password_confirmation: formData.get('password_confirmation') as string
     });
 
-    if (!validatedFields.success) return { errors: validatedFields.error.flatten().fieldErrors };
+    if (!validatedFields.success) return { errors: z.flattenError(validatedFields.error).fieldErrors };
 
     const { email, token, password } = validatedFields.data;
 

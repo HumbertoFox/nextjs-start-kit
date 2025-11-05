@@ -3,6 +3,7 @@
 import { FormStateCreateUpdateAdminUser, getSignUpUpdateSchema } from '@/lib/definitions';
 import prisma from '@/lib/prisma';
 import * as bcrypt from 'bcrypt-ts';
+import z from 'zod';
 
 export async function createUpdateAdminUser(state: FormStateCreateUpdateAdminUser, formData: FormData): Promise<FormStateCreateUpdateAdminUser> {
     const schema = getSignUpUpdateSchema(formData);
@@ -17,7 +18,7 @@ export async function createUpdateAdminUser(state: FormStateCreateUpdateAdminUse
 
     const id = formData.get('id') as string | undefined;
 
-    if (!validatedFields.success) return { errors: validatedFields.error.flatten().fieldErrors };
+    if (!validatedFields.success) return { errors: z.flattenError(validatedFields.error).fieldErrors };
 
     const {
         name,

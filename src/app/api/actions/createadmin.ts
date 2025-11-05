@@ -4,6 +4,7 @@ import { createAdminSchema, FormStateCreateAdmin } from '@/lib/definitions';
 import prisma from '@/lib/prisma';
 import { createSession } from '@/lib/session';
 import * as bcrypt from 'bcrypt-ts';
+import z from 'zod';
 
 export async function createAdmin(state: FormStateCreateAdmin, formData: FormData): Promise<FormStateCreateAdmin> {
     const validatedFields = createAdminSchema.safeParse({
@@ -13,7 +14,7 @@ export async function createAdmin(state: FormStateCreateAdmin, formData: FormDat
         password_confirmation: formData.get('password_confirmation') as string
     });
 
-    if (!validatedFields.success) return { errors: validatedFields.error.flatten().fieldErrors };
+    if (!validatedFields.success) return { errors: z.flattenError(validatedFields.error).fieldErrors };
 
     const { name, email, password } = validatedFields.data;
 
