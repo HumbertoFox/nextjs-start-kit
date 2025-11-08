@@ -117,8 +117,9 @@ export default function Login() {
                             />
                             <button
                                 type="button"
-                                className="btn-icon-toggle"
+                                title={isVisibledPassword ? "Ocultar senha" : "Mostrar senha"}
                                 onClick={togglePasswordVisibility}
+                                className="btn-icon-toggle"
                             >
                                 {isVisibledPassword ? <Icon iconNode={Eye} /> : <Icon iconNode={EyeClosed} />}
                             </button>

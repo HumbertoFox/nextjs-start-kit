@@ -92,8 +92,9 @@ export default function ResetPasswordClient() {
                             />
                             <button
                                 type="button"
-                                className="btn-icon-toggle"
+                                title={showPassword ? "Ocultar senha" : "Mostrar senha"}
                                 onClick={toggleShowPassword}
+                                className="btn-icon-toggle"
                             >
                                 {showPassword ? <Icon iconNode={Eye} /> : <Icon iconNode={EyeClosed} />}
                             </button>
@@ -118,8 +119,9 @@ export default function ResetPasswordClient() {
                             />
                             <button
                                 type="button"
-                                className="btn-icon-toggle"
+                                title={showPasswordConfirm ? "Ocultar senha" : "Mostrar senha"}
                                 onClick={toggleShowPasswordConfirm}
+                                className="btn-icon-toggle"
                             >
                                 {showPasswordConfirm ? <Icon iconNode={Eye} /> : <Icon iconNode={EyeClosed} />}
                             </button>

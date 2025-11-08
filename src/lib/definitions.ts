@@ -1,14 +1,14 @@
-import { z, object, string, email } from 'zod';
+import * as z from 'zod';
 
-export const createAdminSchema = object({
-    name: string()
+export const createAdminSchema = z.object({
+    name: z.string()
         .min(1, 'Nome é obrigatório'),
-    email: email('Endereço de e-mail inválido')
+    email: z.email('Endereço de e-mail inválido')
         .trim()
         .toLowerCase(),
-    password: string()
+    password: z.string()
         .min(8, 'A senha deve ter pelo menos 8 caracteres'),
-    password_confirmation: string()
+    password_confirmation: z.string()
         .min(1, 'Por favor confirme sua senha')
 })
     .refine((data) => data.password === data.password_confirmation, {
@@ -19,18 +19,18 @@ export const createAdminSchema = object({
 export function getSignUpUpdateSchema(formData: FormData) {
     const isEdit = Boolean(formData.get('id'));
 
-    return object({
-        name: string()
+    return z.object({
+        name: z.string()
             .min(1, 'Nome é obrigatório'),
-        email: email('Endereço de e-mail inválido')
+        email: z.email('Endereço de e-mail inválido')
             .trim()
             .toLowerCase(),
         password: isEdit
-            ? string().optional()
-            : string().min(8, 'A senha deve ter pelo menos 8 caracteres'),
+            ? z.string().optional()
+            : z.string().min(8, 'A senha deve ter pelo menos 8 caracteres'),
         password_confirmation: isEdit
-            ? string().optional()
-            : string().min(1, 'Por favor confirme sua senha'),
+            ? z.string().optional()
+            : z.string().min(1, 'Por favor confirme sua senha'),
         role: z.enum(['ADMIN', 'USER'], {
             error: 'A função deve ser USUÁRIO ou ADMINISTRADOR(A)'
         })
@@ -46,34 +46,34 @@ export function getSignUpUpdateSchema(formData: FormData) {
         });
 }
 
-export const signInSchema = object({
-    email: email('E-mail inválido')
+export const signInSchema = z.object({
+    email: z.email('E-mail inválido')
         .trim()
         .toLowerCase(),
-    password: string()
+    password: z.string()
         .min(8, 'A senha deve ter mais de 8 caracteres')
         .max(32, 'A senha deve ter menos de 32 caracteres')
 })
 
-export const updateUserSchema = object({
-    name: string()
+export const updateUserSchema = z.object({
+    name: z.string()
         .min(1, 'Nome é obrigatório'),
-    email: email('E-mail inválido')
+    email: z.email('E-mail inválido')
         .trim()
         .toLowerCase()
 })
 
-export const deleteUserSchema = object({
-    password: string()
+export const deleteUserSchema = z.object({
+    password: z.string()
         .min(8, 'A senha deve ter pelo menos 8 caracteres')
 })
 
-export const passwordUpdateSchema = object({
-    current_password: string()
+export const passwordUpdateSchema = z.object({
+    current_password: z.string()
         .min(8, 'A senha deve ter pelo menos 8 caracteres'),
-    password: string()
+    password: z.string()
         .min(8, 'A senha deve ter pelo menos 8 caracteres'),
-    password_confirmation: string()
+    password_confirmation: z.string()
         .min(8, 'Por favor confirme sua senha')
 })
     .refine((data) => data.password === data.password_confirmation, {
@@ -81,15 +81,15 @@ export const passwordUpdateSchema = object({
         path: ['password_confirmation']
     });
 
-export const passwordResetSchema = object({
-    email: email('E-mail inválido')
+export const passwordResetSchema = z.object({
+    email: z.email('E-mail inválido')
         .trim()
         .toLowerCase(),
-    token: string()
+    token: z.string()
         .min(1, 'Token é necessário'),
-    password: string()
+    password: z.string()
         .min(8, 'A senha deve ter mais de 8 caracteres'),
-    password_confirmation: string()
+    password_confirmation: z.string()
         .min(1, 'Por favor confirme sua senha')
 })
     .refine((data) => data.password === data.password_confirmation, {
@@ -97,8 +97,8 @@ export const passwordResetSchema = object({
         path: ['password_confirmation']
     });
 
-export const passwordForgotSchema = object({
-    email: email('E-mail inválido')
+export const passwordForgotSchema = z.object({
+    email: z.email('E-mail inválido')
         .trim()
         .toLowerCase()
 });
