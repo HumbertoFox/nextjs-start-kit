@@ -9,6 +9,7 @@ interface UserProps {
     readonly name: string;
     readonly email: string;
     readonly role: string;
+    readonly image: string;
 }
 
 export const generateMetadata = async (): Promise<Metadata> => {
@@ -28,7 +29,8 @@ export default async function Update({ params }: { params: Promise<{ id: string 
             id: true,
             name: true,
             email: true,
-            role: true
+            role: true,
+            image: true,
         }
     });
     return (

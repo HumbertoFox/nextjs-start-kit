@@ -110,6 +110,7 @@ export type FormStateCreateAdmin =
             email?: string[];
             password?: string[];
             password_confirmation?: string[];
+            image?: string[];
         }
         message?: boolean;
         warning?: string;
@@ -123,6 +124,7 @@ export type FormStateCreateUpdateAdminUser =
             role?: string[];
             password?: string[];
             password_confirmation?: string[];
+            image?: string[];
         }
         message?: boolean;
     } | undefined;
