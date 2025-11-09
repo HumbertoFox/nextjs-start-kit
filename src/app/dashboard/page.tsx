@@ -18,5 +18,6 @@ export default async function Dashboard() {
     }
   });
   if (!sessionUser?.id || !user?.id) redirect('/login');
+  
   return <DashboardPageClient />;
 }

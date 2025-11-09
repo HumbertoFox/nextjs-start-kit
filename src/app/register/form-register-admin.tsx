@@ -49,6 +49,7 @@ export default function RegisterAdmin() {
     const toggleShowPasswordConfirm = () => setShowPasswordConfirm(prev => !prev);
     const submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (imageError) return;
         const formData = new FormData(e.currentTarget);
         if (imageFile) formData.append('file', imageFile);
         startTransition(() => action(formData));
@@ -95,6 +96,7 @@ export default function RegisterAdmin() {
 
                             <Label
                                 htmlFor="file"
+                                title={imageError ? "Click em Selecionar imagem e em Cancelar" : "Selecionar imagem de perfil"}
                                 className="cursor-pointer px-3 py-1 text-sm border rounded-md hover:bg-gray-50"
                             >
                                 Selecionar imagem
@@ -122,7 +124,7 @@ export default function RegisterAdmin() {
                             type="text"
                             required
                             autoFocus
-                            tabIndex={1}
+                            tabIndex={2}
                             autoComplete="name"
                             value={data.name}
                             onChange={handleChange}
@@ -140,7 +142,7 @@ export default function RegisterAdmin() {
                             type="email"
                             ref={emailRef}
                             required
-                            tabIndex={2}
+                            tabIndex={3}
                             autoComplete="email"
                             value={data.email}
                             onChange={handleChange}
@@ -158,7 +160,7 @@ export default function RegisterAdmin() {
                                 name="password"
                                 type={showPassword ? "text" : "password"}
                                 required
-                                tabIndex={3}
+                                tabIndex={4}
                                 autoComplete="new-password"
                                 value={data.password}
                                 onChange={handleChange}
@@ -185,7 +187,7 @@ export default function RegisterAdmin() {
                                 name="password_confirmation"
                                 type={showPasswordConfirm ? "text" : "password"}
                                 required
-                                tabIndex={4}
+                                tabIndex={5}
                                 autoComplete="new-password"
                                 value={data.password_confirmation}
                                 onChange={handleChange}
@@ -207,8 +209,8 @@ export default function RegisterAdmin() {
                     <Button
                         type="submit"
                         tabIndex={6}
-                        disabled={pending}
-                        aria-busy={pending}
+                        disabled={pending || Boolean(imageError)}
+                        aria-busy={pending || Boolean(imageError)}
                         className="mt-2 w-full"
                     >
                         {pending && <LoaderCircle className="h-4 w-4 animate-spin" />}

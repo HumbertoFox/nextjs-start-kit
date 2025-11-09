@@ -32,7 +32,7 @@ export function getSignUpUpdateSchema(formData: FormData) {
             ? z.string().optional()
             : z.string().min(1, 'Por favor confirme sua senha'),
         role: z.enum(['ADMIN', 'USER'], {
-            error: 'A função deve ser USUÁRIO ou ADMINISTRADOR(A)'
+            error: 'A função deve ser USUÁRIA(O) ou ADMINISTRADOR(A)'
         })
     })
         .superRefine((data, ctx) => {

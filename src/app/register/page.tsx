@@ -8,12 +8,14 @@ export const generateMetadata = async (): Promise<Metadata> => {
     title: 'Cadastrar Administrador'
   };
 };
+
 export default async function Register() {
-  const isUserAdmin = await prisma.user.findMany({
+  const isUserAdmin = await prisma.user.findFirst({
     where: {
       role: 'ADMIN'
     }
   });
-  if (isUserAdmin.length > 0) redirect('/dashboard');
+  if (isUserAdmin) redirect('/dashboard');
+
   return <RegisterAdmin />;
 }
