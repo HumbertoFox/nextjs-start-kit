@@ -15,6 +15,7 @@ export default async function Profile() {
         <ProfilePageClient
             name={user.name}
             email={user.email}
+            image={user.image}
             mustVerifyEmail={!user.emailVerified}
         />
     );
