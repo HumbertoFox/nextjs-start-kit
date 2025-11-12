@@ -34,7 +34,11 @@ export default function ProfilePageClient({ name, email, image, mustVerifyEmail 
     const [imageError, setImageError] = useState<string | null>(null);
     const [status, setStatus] = useState<string | null>(null);
     const [recentlySuccessful, setRecentlySuccessful] = useState<boolean>(false);
-    const [data, setData] = useState<ProfileForm>({ name: name, email: email });
+    const [data, setData] = useState<ProfileForm>({
+        name: name,
+        email: email,
+        image: image
+    });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
