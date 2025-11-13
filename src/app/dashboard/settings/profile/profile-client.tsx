@@ -46,10 +46,22 @@ export default function ProfilePageClient({ name, email, image, mustVerifyEmail 
     };
     const onImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const { file, preview, error } = await handleImageChange(e);
+        if (error) {
+            setImageError(error);
+            setImageFile(null);
+            setImagePreview(image ?? null);
+            e.target.value = '';
+            return;
+        }
         setImageFile(file);
         setImagePreview(preview);
         setImageError(error);
     };
+    useEffect(() => {
+        return () => {
+            if (imagePreview && imagePreview.startsWith('blob:')) URL.revokeObjectURL(imagePreview);
+        };
+    }, [imagePreview]);
     const submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (imageError) return;
@@ -86,10 +98,9 @@ export default function ProfilePageClient({ name, email, image, mustVerifyEmail 
                     title="Informações do perfil"
                     description="Atualize seu nome e endereço de e-mail"
                 />
-
                 <form onSubmit={submit} className="space-y-6">
                     <div className="flex flex-col-reverse justify-between lg:flex-row gap-6">
-                        <div className="flex flex-col flex-1 gap-6">
+                        <div className="min-w-2/3 flex flex-col flex-1 gap-6">
                             <div className="grid gap-2">
                                 <Label htmlFor="name">Nome</Label>
                                 <Input
