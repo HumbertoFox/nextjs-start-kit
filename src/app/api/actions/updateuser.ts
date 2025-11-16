@@ -45,9 +45,7 @@ export async function updateUser(state: FormStateUserUpdate, formData: FormData)
         try {
             if (sessionUser.image) {
                 try {
-                    await del(sessionUser.image, {
-                        token: process.env.BLOB_READ_WRITE_TOKEN,
-                    });
+                    await del(sessionUser.image);
                 } catch (deleteErr) {
                     console.warn('Não foi possível deletar imagem anterior:', deleteErr);
                 }
@@ -56,7 +54,6 @@ export async function updateUser(state: FormStateUserUpdate, formData: FormData)
             const uniqueFileName = `${crypto.randomUUID()}-${file.name}`;
             const blob = await put(`avatars/${uniqueFileName}`, file, {
                 access: 'public',
-                token: process.env.BLOB_READ_WRITE_TOKEN,
             });
 
             if (blob.url) {

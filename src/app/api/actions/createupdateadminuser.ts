@@ -63,7 +63,6 @@ export async function createUpdateAdminUser(state: FormStateCreateUpdateAdminUse
             const uniqueFileName = `${crypto.randomUUID()}-${file.name}`;
             const blob = await put(`avatars/${uniqueFileName}`, file, {
                 access: 'public',
-                token: process.env.BLOB_READ_WRITE_TOKEN,
             });
 
             imageUrl = blob.url;
