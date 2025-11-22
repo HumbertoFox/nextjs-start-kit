@@ -33,6 +33,7 @@
     "bcrypt-ts": "^7.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dotenv": "^17.2.3",
     "gsap": "^3.13.0",
     "jose": "^6.1.0",
     "lucide-react": "^0.552.0",
