@@ -12,7 +12,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
 };
 
 export default async function Welcome() {
-  const isUserAdmin = await prisma.user.findMany({
+  const isUserAdmin = await prisma.user.count({
     where: {
       role: 'ADMIN'
     }
@@ -30,7 +30,7 @@ export default async function Welcome() {
               Painel
             </Link>
           ) : (
-            isUserAdmin.length > 0 ? (
+            isUserAdmin > 0 ? (
               <Link
                 href="/login"
                 className="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"

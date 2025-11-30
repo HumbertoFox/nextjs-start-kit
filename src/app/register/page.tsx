@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma';
 import RegisterAdmin from './form-register-admin';
 import { redirect } from 'next/navigation';
 import { Metadata } from 'next';
+import { getSession } from '@/lib/session';
 
 export const generateMetadata = async (): Promise<Metadata> => {
   return {
@@ -10,12 +11,17 @@ export const generateMetadata = async (): Promise<Metadata> => {
 };
 
 export default async function Register() {
-  const isUserAdmin = await prisma.user.findFirst({
+  const session = await getSession();
+  const adminCount = await prisma.user.count({
     where: {
       role: 'ADMIN'
     }
   });
-  if (isUserAdmin) redirect('/dashboard');
+  const hasAdmin = adminCount > 0;
+  if (hasAdmin) {
+    if (session) redirect('/dashboard');
+    redirect('/');
+  }
 
   return <RegisterAdmin />;
 }
