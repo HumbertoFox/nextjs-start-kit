@@ -5,6 +5,8 @@ import AppLogoIcon from '@/components/app-logo-icon';
 import Link from 'next/link';
 import { useEffect, useRef, type PropsWithChildren } from 'react';
 import gsap from 'gsap';
+import AppLogoVercelIcon from '@/components/app-logo-vercel-icon';
+import { Plus } from 'lucide-react';
 
 interface AuthLayoutProps {
     title?: string;
@@ -13,19 +15,37 @@ interface AuthLayoutProps {
 
 export default function AuthSplitLayout({ children, title, description }: PropsWithChildren<AuthLayoutProps>) {
     const logoRef = useRef<HTMLDivElement>(null);
+    const logoPlusRef = useRef<HTMLDivElement>(null);
+    const logoVercelRef = useRef<HTMLDivElement>(null);
     const { quote } = appInfo;
     useEffect(() => {
-        if (!logoRef.current) return;
+        if (!logoRef.current || !logoVercelRef.current || !logoPlusRef.current) return;
         const tl = gsap.timeline();
 
         tl.fromTo(
-            logoRef.current,
+            logoVercelRef.current,
             { x: -500, opacity: 0, scale: 0.8 },
-            { x: 0, opacity: 1, scale: 1, duration: 1, ease: 'power3.out' }
-        ).to(
-            logoRef.current,
-            { scale: 1.2, duration: 0.2, ease: 'power1.inOut', yoyo: true, repeat: 3 }
-        );
+            { x: 0, opacity: 1, scale: 1, duration: 1, ease: "power3.out" }
+        )
+            .fromTo(
+                logoRef.current,
+                { x: -500, opacity: 0, scale: 0.8 },
+                { x: 0, opacity: 1, scale: 1, duration: 1, ease: "power3.out" },
+                "+=0.3"
+            )
+            .to(
+                logoRef.current,
+                { scale: 1.2, duration: 0.2, ease: "power1.inOut", yoyo: true, repeat: 3 }
+            )
+            .to(
+                logoVercelRef.current,
+                { scale: 1.2, duration: 0.2, ease: "power1.inOut", yoyo: true, repeat: 3 }
+            )
+            .fromTo(
+                logoPlusRef.current,
+                { opacity: 0, scale: 0.5 },
+                { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" }
+            );
     }, []);
     return (
         <div className="relative grid h-dvh flex-col items-center justify-center px-8 sm:px-0 lg:max-w-none lg:grid-cols-2 lg:px-0">
@@ -37,9 +57,15 @@ export default function AuthSplitLayout({ children, title, description }: PropsW
                         {appInfo.name}
                     </Link>
                 </div>
-                <div className="flex items-center justify-center h-full z-10">
+                <div className="flex items-center justify-center gap-6 h-full z-10">
                     <div ref={logoRef} className="opacity-0">
-                        <AppLogoIcon className="size-50 fill-white dark:bg-black rounded-full" />
+                        <AppLogoIcon className="size-50 fill-white rounded-full" />
+                    </div>
+                    <div ref={logoPlusRef} className="opacity-0">
+                        <Plus className="size-16" />
+                    </div>
+                    <div ref={logoVercelRef} className="opacity-0">
+                        <AppLogoVercelIcon className="size-50 fill-white" />
                     </div>
                 </div>
                 {quote && (
