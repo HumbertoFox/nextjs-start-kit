@@ -14,8 +14,7 @@ export async function deleteUser(state: FormStateUserDelete, formData: FormData)
     const { password } = validatedFields.data;
 
     const sessionUser = await getUser();
-
-    if (!sessionUser?.id) return { message: false };
+    if (!sessionUser || !sessionUser?.id) return { message: false };
 
     const existingUser = await prisma.user.findUnique({
         where: {

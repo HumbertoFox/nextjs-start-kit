@@ -6,7 +6,7 @@ import prisma from '@/lib/prisma';
 import crypto from 'crypto';
 
 export async function emailVerifiedChecked() {
-    const sessionUser = await getUser();;
+    const sessionUser = await getUser();
 
     if (!sessionUser?.email) return null;
 

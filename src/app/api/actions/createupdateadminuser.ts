@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt-ts';
 import z from 'zod';
 import sharp from 'sharp';
 import { revalidatePath } from 'next/cache';
+import { getUser } from '@/lib/dal';
 
 const MAX_FILE_SIZE = 512 * 1024;
 const MAX_DIMENSION = 512;
@@ -40,6 +41,9 @@ export async function createUpdateAdminUser(state: FormStateCreateUpdateAdminUse
         password,
         role
     } = validatedFields.data;
+
+    const sessionUser = await getUser();
+    if (!sessionUser || sessionUser.role !== 'ADMIN') return;
 
     try {
         const hashedPassword = password ? await bcrypt.hash(password, 12) : undefined;
